@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material Design 3 的颜色角色，由各套配色方案的主题分别赋值。 -->
+<resources>
+    <attr name="lgPrimary" format="color" />
+    <attr name="lgOnPrimary" format="color" />
+    <attr name="lgPrimaryContainer" format="color" />
+    <attr name="lgOnPrimaryContainer" format="color" />
+    <attr name="lgSurface" format="color" />
+    <attr name="lgSurfaceVariant" format="color" />
+    <attr name="lgOnSurface" format="color" />
+    <attr name="lgOnSurfaceVariant" format="color" />
+    <attr name="lgOutline" format="color" />
+    <attr name="lgOutlineVariant" format="color" />
+    <attr name="lgDanger" format="color" />
+    <attr name="lgDangerContainer" format="color" />
+    <attr name="lgPageBg" format="color" />
+</resources>

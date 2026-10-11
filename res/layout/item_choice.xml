@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.LG.Row"
+    android:background="?android:attr/selectableItemBackground"
+    android:minHeight="58dp"
+    android:paddingStart="12dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        style="@style/Text.LG.Label"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="14dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/tvTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/tag_default"
+        android:textColor="?attr/lgPrimary"
+        android:textSize="11sp"
+        android:visibility="gone" />
+</LinearLayout>

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ================================================================
+         基础主题
+         ================================================================ -->
+
+    <style name="Theme.LG.Light" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">?attr/lgPageBg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?attr/lgPageBg</item>
+        <item name="android:navigationBarColor">?attr/lgSurface</item>
+        <item name="android:colorAccent">?attr/lgPrimary</item>
+        <item name="android:colorControlActivated">?attr/lgPrimary</item>
+        <item name="android:textColorPrimary">?attr/lgOnSurface</item>
+        <item name="android:textColorSecondary">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textColorHint">?attr/lgOutline</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Activity</item>
+    </style>
+
+    <style name="Theme.LG.Dark" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">?attr/lgPageBg</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">?attr/lgPageBg</item>
+        <item name="android:navigationBarColor">?attr/lgSurface</item>
+        <item name="android:colorAccent">?attr/lgPrimary</item>
+        <item name="android:textColorPrimary">?attr/lgOnSurface</item>
+        <item name="android:textColorSecondary">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textColorHint">?attr/lgOutline</item>
+    </style>
+
+    <!-- ================================================================
+         配色方案（每套主题只负责给颜色角色赋值）
+         ================================================================ -->
+
+    <!-- 默认蓝 -->
+    <style name="Theme.LG.Blue" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF0B57D0</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FFD3E3FD</item>
+        <item name="lgOnPrimaryContainer">#FF041E49</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFE3E2E8</item>
+        <item name="lgOnSurface">#FF1A1C1E</item>
+        <item name="lgOnSurfaceVariant">#FF44474F</item>
+        <item name="lgOutline">#FF9AA0AA</item>
+        <item name="lgOutlineVariant">#FFE0E5EC</item>
+        <item name="lgDanger">#FFBA1A1A</item>
+        <item name="lgDangerContainer">#FFFFDAD6</item>
+        <item name="lgPageBg">#FFF6F8FC</item>
+    </style>
+
+    <!-- 紫（Material 3 基线） -->
+    <style name="Theme.LG.Purple" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF6750A4</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FFEADDFF</item>
+        <item name="lgOnPrimaryContainer">#FF21005D</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFE7E0EC</item>
+        <item name="lgOnSurface">#FF1D1B20</item>
+        <item name="lgOnSurfaceVariant">#FF49454F</item>
+        <item name="lgOutline">#FF9C96A3</item>
+        <item name="lgOutlineVariant">#FFE6E0EA</item>
+        <item name="lgDanger">#FFB3261E</item>
+        <item name="lgDangerContainer">#FFF9DEDC</item>
+        <item name="lgPageBg">#FFF8F5FB</item>
+    </style>
+
+    <!-- 青 -->
+    <style name="Theme.LG.Teal" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF00696D</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FF9CF1F3</item>
+        <item name="lgOnPrimaryContainer">#FF002021</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFDAE4E5</item>
+        <item name="lgOnSurface">#FF191C1D</item>
+        <item name="lgOnSurfaceVariant">#FF3F4849</item>
+        <item name="lgOutline">#FF93A0A1</item>
+        <item name="lgOutlineVariant">#FFDDE7E8</item>
+        <item name="lgDanger">#FFBA1A1A</item>
+        <item name="lgDangerContainer">#FFFFDAD6</item>
+        <item name="lgPageBg">#FFF5FAFA</item>
+    </style>
+
+    <!-- 绿 -->
+    <style name="Theme.LG.Green" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF3B6939</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FFBCF0B4</item>
+        <item name="lgOnPrimaryContainer">#FF002204</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFDEE5DA</item>
+        <item name="lgOnSurface">#FF191D18</item>
+        <item name="lgOnSurfaceVariant">#FF424940</item>
+        <item name="lgOutline">#FF96A093</item>
+        <item name="lgOutlineVariant">#FFE1E8DE</item>
+        <item name="lgDanger">#FFBA1A1A</item>
+        <item name="lgDangerContainer">#FFFFDAD6</item>
+        <item name="lgPageBg">#FFF7FAF5</item>
+    </style>
+
+    <!-- 橙 -->
+    <style name="Theme.LG.Orange" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF8B5000</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FFFFDCBE</item>
+        <item name="lgOnPrimaryContainer">#FF2D1600</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFF0E0D2</item>
+        <item name="lgOnSurface">#FF201A16</item>
+        <item name="lgOnSurfaceVariant">#FF52443A</item>
+        <item name="lgOutline">#FFA08D80</item>
+        <item name="lgOutlineVariant">#FFEDE0D5</item>
+        <item name="lgDanger">#FFBA1A1A</item>
+        <item name="lgDangerContainer">#FFFFDAD6</item>
+        <item name="lgPageBg">#FFFDF7F2</item>
+    </style>
+
+    <!-- 玫红 -->
+    <style name="Theme.LG.Pink" parent="Theme.LG.Light">
+        <item name="lgPrimary">#FF9C4059</item>
+        <item name="lgOnPrimary">#FFFFFFFF</item>
+        <item name="lgPrimaryContainer">#FFFFD9E1</item>
+        <item name="lgOnPrimaryContainer">#FF3F0017</item>
+        <item name="lgSurface">#FFFFFFFF</item>
+        <item name="lgSurfaceVariant">#FFF2DEE2</item>
+        <item name="lgOnSurface">#FF201A1B</item>
+        <item name="lgOnSurfaceVariant">#FF514347</item>
+        <item name="lgOutline">#FFA18C90</item>
+        <item name="lgOutlineVariant">#FFEFDDE1</item>
+        <item name="lgDanger">#FFBA1A1A</item>
+        <item name="lgDangerContainer">#FFFFDAD6</item>
+        <item name="lgPageBg">#FFFDF6F8</item>
+    </style>
+
+    <!-- 深色 -->
+    <style name="Theme.LG.Dark2" parent="Theme.LG.Dark">
+        <item name="lgPrimary">#FFA8C7FA</item>
+        <item name="lgOnPrimary">#FF002E69</item>
+        <item name="lgPrimaryContainer">#FF0842A0</item>
+        <item name="lgOnPrimaryContainer">#FFD3E3FD</item>
+        <item name="lgSurface">#FF1E1F24</item>
+        <item name="lgSurfaceVariant">#FF2B2930</item>
+        <item name="lgOnSurface">#FFE5E1E6</item>
+        <item name="lgOnSurfaceVariant">#FFCAC4D0</item>
+        <item name="lgOutline">#FF8E9099</item>
+        <item name="lgOutlineVariant">#FF33353B</item>
+        <item name="lgDanger">#FFFFB4AB</item>
+        <item name="lgDangerContainer">#FF93000A</item>
+        <item name="lgPageBg">#FF101014</item>
+    </style>
+
+    <!-- ================================================================
+         拦截弹窗：透明全屏窗口 + 居中卡片，配色跟随所选方案
+         ================================================================ -->
+
+    <style name="Theme.LG.Intercept" parent="Theme.LG.Blue">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Purple.Intercept" parent="Theme.LG.Purple">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Teal.Intercept" parent="Theme.LG.Teal">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Green.Intercept" parent="Theme.LG.Green">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Orange.Intercept" parent="Theme.LG.Orange">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Pink.Intercept" parent="Theme.LG.Pink">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LG.Dark2.Intercept" parent="Theme.LG.Dark2">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.65</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <!-- ================================================================
+         MD3 排版
+         ================================================================ -->
+
+    <style name="Text.LG.Headline" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Text.LG.Title" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.LG.Body" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+    </style>
+
+    <style name="Text.LG.Label" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Text.LG.Sub" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">3dp</item>
+    </style>
+
+    <!-- ================================================================
+         MD3 容器
+         ================================================================ -->
+
+    <style name="Widget.LG.Card" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:background">@drawable/md_card</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">18dp</item>
+    </style>
+
+    <style name="Widget.LG.Divider" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">?attr/lgOutlineVariant</item>
+    </style>
+
+    <!-- ================================================================
+         MD3 按钮
+         ================================================================ -->
+
+    <style name="Widget.LG.Button" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Widget.LG.Button.Filled" parent="@style/Widget.LG.Button">
+        <item name="android:background">@drawable/md_btn_filled</item>
+        <item name="android:textColor">?attr/lgOnPrimary</item>
+    </style>
+
+    <style name="Widget.LG.Button.Tonal" parent="@style/Widget.LG.Button">
+        <item name="android:background">@drawable/md_btn_tonal</item>
+        <item name="android:textColor">?attr/lgOnPrimaryContainer</item>
+    </style>
+
+    <style name="Widget.LG.Button.Outlined" parent="@style/Widget.LG.Button">
+        <item name="android:background">@drawable/md_btn_outlined</item>
+        <item name="android:textColor">?attr/lgPrimary</item>
+    </style>
+
+    <style name="Widget.LG.Button.Outlined.Danger" parent="@style/Widget.LG.Button.Outlined">
+        <item name="android:background">@drawable/md_btn_outlined_danger</item>
+        <item name="android:textColor">?attr/lgDanger</item>
+    </style>
+
+    <!-- ================================================================
+         MD3 输入框 / 列表行
+         ================================================================ -->
+
+    <style name="Widget.LG.Field" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/md_field</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textColorHint">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <!-- ================================================================
+         列表项
+         ================================================================ -->
+
+    <style name="Widget.LG.Row" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingStart">18dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+</resources>

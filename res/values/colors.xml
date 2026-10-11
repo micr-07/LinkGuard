@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="page_bg">#FFF1F3F6</color>
+    <color name="card_bg">#FFFFFFFF</color>
+    <color name="card_stroke">#14000000</color>
+    <color name="text_primary">#FF1B1F24</color>
+    <color name="text_secondary">#FF6B7280</color>
+    <color name="text_tertiary">#FF9AA1AC</color>
+    <color name="accent">#FF2563EB</color>
+    <color name="ok">#FF12A150</color>
+    <color name="danger">#FFDC2626</color>
+    <color name="divider">#14000000</color>
+</resources>

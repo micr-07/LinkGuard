@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.linkguard.browser">
+
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="36" />
+
+    <!-- 本应用自身不联网，声明它只是为了满足系统“默认浏览器”角色的资格校验。 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+      Android 11+ 的包可见性限制：没有它，queryIntentActivities() 只能看到自己，
+      浏览器列表会是空的。部分国产 ROM（vivo/OPPO/小米）把它映射成
+      “读取应用列表”权限，需要用户在系统权限管理里允许一次。
+    -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- 让本应用在 Android 11+ 上仍能枚举其它浏览器（包可见性） -->
+    <queries>
+        <!--
+          关键：这里故意不带 <category>。
+          包可见性的匹配规则是「目标应用的 intent-filter 必须包含查询意图的全部 category」，
+          查询意图不带 category，就等价于对 category 没有任何要求 —— 于是所有能处理
+          http/https VIEW 的应用（也就是所有浏览器，包括 Via、X 浏览器这类没被我列举到的）
+          都会对本应用可见。
+        -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+
+        <!-- 原来的带 BROWSABLE 版本保留，覆盖极少数只声明 BROWSABLE 的实现 -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+
+        <!--
+          再显式声明常见浏览器包名。个别 ROM 会忽略上面的 QUERY_ALL_PACKAGES，
+          但 <package> 声明是系统级机制，声明后这些包必定可见。
+        -->
+        <package android:name="com.android.chrome" />
+        <package android:name="com.chrome.beta" />
+        <package android:name="com.chrome.dev" />
+        <package android:name="com.chrome.canary" />
+        <package android:name="com.quark.browser" />
+        <package android:name="com.UCMobile" />
+        <package android:name="com.uc.browser" />
+        <package android:name="com.tencent.mtt" />
+        <package android:name="com.tencent.mtt.x86" />
+        <package android:name="com.baidu.searchbox" />
+        <package android:name="com.baidu.browser.apps" />
+        <package android:name="mark.via" />
+        <package android:name="mark.via.gp" />
+        <package android:name="com.mmbox.xbrowser" />
+        <package android:name="com.mmbox.xbrowser.pro" />
+        <package android:name="com.browser2345" />
+        <package android:name="com.qihoo.browser" />
+        <package android:name="com.qihoo.contents" />
+        <package android:name="com.sogou.browser" />
+        <package android:name="com.sogou.explorer" />
+        <package android:name="com.vivo.browser" />
+        <package android:name="com.android.browser" />
+        <package android:name="com.miui.browser" />
+        <package android:name="com.mi.globalbrowser" />
+        <package android:name="com.heytap.browser" />
+        <package android:name="com.coloros.browser" />
+        <package android:name="com.oppo.browser" />
+        <package android:name="com.huawei.browser" />
+        <package android:name="com.hihonor.browser" />
+        <package android:name="com.transsion.phoenix" />
+        <package android:name="com.zui.browser" />
+        <package android:name="com.ume.browser" />
+        <package android:name="com.dolphin.browser.express.web" />
+        <package android:name="com.jiubang.browser" />
+        <package android:name="com.sec.android.app.sbrowser" />
+        <package android:name="com.sec.android.app.sbrowser.beta" />
+        <package android:name="org.mozilla.firefox" />
+        <package android:name="org.mozilla.firefox_beta" />
+        <package android:name="org.mozilla.focus" />
+        <package android:name="org.mozilla.klar" />
+        <package android:name="com.microsoft.emmx" />
+        <package android:name="com.brave.browser" />
+        <package android:name="com.brave.browser_beta" />
+        <package android:name="com.vivaldi.browser" />
+        <package android:name="com.opera.browser" />
+        <package android:name="com.opera.browser.beta" />
+        <package android:name="com.opera.mini.native" />
+        <package android:name="com.opera.gx" />
+        <package android:name="com.duckduckgo.mobile.android" />
+        <package android:name="com.ecosia.android" />
+        <package android:name="com.kiwibrowser.browser" />
+        <package android:name="com.yandex.browser" />
+        <package android:name="com.cloudmosa.puffinFree" />
+        <package android:name="com.google.android.googlequicksearchbox" />
+        <package android:name="org.chromium.webview_shell" />
+        <package android:name="com.android.htmlviewer" />
+        <package android:name="com.ghostery.android.ghostery" />
+        <package android:name="acr.browser.lightning" />
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LG.Blue">
+
+        <!-- 桌面入口：设置界面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 名单 / 记录：各自独立界面 -->
+        <activity
+            android:name=".BlacklistActivity"
+            android:exported="false"
+            android:label="@string/title_blacklist"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".WhitelistActivity"
+            android:exported="false"
+            android:label="@string/title_whitelist"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".AppBlockActivity"
+            android:exported="false"
+            android:label="@string/title_appblock"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".LogActivity"
+            android:exported="false"
+            android:label="@string/title_logs"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- 浏览器入口：被其它应用拉起时只弹窗，不显示应用界面 -->
+        <activity
+            android:name=".InterceptActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|density"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.LG.Intercept">
+            <intent-filter android:priority="100">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

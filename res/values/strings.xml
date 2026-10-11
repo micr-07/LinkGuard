@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LinkGuard</string>
+    <string name="app_slogan">防乱拉浏览器 · 只在需要时打扰你</string>
+    <string name="back">返回</string>
+
+    <!-- 配色 -->
+    <string name="sec_theme">外观</string>
+    <string name="theme_current">当前配色：%1$s</string>
+    <string name="btn_pick_theme">更换配色</string>
+    <string name="pick_theme_title">选择配色</string>
+    <string name="scheme_blue">默认蓝</string>
+    <string name="scheme_purple">紫罗兰</string>
+    <string name="scheme_teal">青碧</string>
+    <string name="scheme_green">森林绿</string>
+    <string name="scheme_orange">暖橙</string>
+    <string name="scheme_pink">玫红</string>
+    <string name="scheme_dark">深色</string>
+
+    <!-- 拦截弹窗 -->
+    <string name="ask_title">有应用想打开一个链接</string>
+    <string name="source_app">来自：%s</string>
+    <string name="opt_once">仅这一次</string>
+    <string name="opt_always">始终（加入白名单）</string>
+    <string name="opt_block">加入黑名单</string>
+    <string name="opt_back">返回</string>
+    <string name="opt_ask_every_time">不记住，每次都问我</string>
+    <string name="block_this_app">屏蔽「%1$s」</string>
+    <string name="pick_hint_once">还没设置默认浏览器，选一个只用于本次打开：</string>
+    <string name="pick_hint_after_always">已加入白名单。还没设置默认浏览器，选一个只用于本次打开：</string>
+    <string name="will_open_with">将用「%1$s」打开</string>
+    <string name="will_open_ask">还没设置默认浏览器，打开前会让你选一个</string>
+    <string name="no_browser">没有找到其它可用的浏览器</string>
+    <string name="no_browser_hint">系统只让本应用看到 %d 个已安装应用，说明“读取应用列表”权限被限制了。\n可以到「系统设置 → 应用 → LinkGuard → 权限」里允许读取应用列表；\n也可以直接点下面的“系统打开方式”让它自己选。修复后列表会立即恢复。</string>
+    <string name="pick_system_list">使用系统的“打开方式”选择</string>
+    <string name="pick_system_other">其它浏览器（系统打开方式）</string>
+    <string name="pick_system_short">系统选择器</string>
+    <string name="browser_list_empty_title">没有扫描到浏览器</string>
+    <string name="browser_list_empty_msg">系统当前只让本应用看到 %d 个已安装应用。\n\n请到「系统设置 → 应用 → 应用管理 → LinkGuard → 权限」里打开“读取应用列表 / 获取应用列表”权限，然后回到本页重启应用。\n\n（弹窗里的“其它浏览器（系统打开方式）”不受此限制，可以直接用。）</string>
+
+    <!-- 提示 -->
+    <string name="toast_blocked">已拦截：%s</string>
+    <string name="toast_added_black">已加入黑名单：%s</string>
+    <string name="toast_added_white">已加入白名单：%1$s\n以后用「%2$s」打开</string>
+    <string name="toast_white_need_default">已加入白名单：%s（还没设置默认浏览器）</string>
+    <string name="toast_rule_saved">已记住：%s</string>
+    <string name="toast_launch_failed">无法打开 %s</string>
+    <string name="toast_is_default">已经是系统默认浏览器了</string>
+    <string name="toast_not_support_role">本机不支持自动申请，请在系统设置中手动选择</string>
+
+    <!-- 设置界面 -->
+    <string name="sec_status">状态</string>
+    <string name="status_default_yes">✔ 已是系统默认浏览器，拦截已生效</string>
+    <string name="status_default_no">✘ 还不是系统默认浏览器，拦截不会生效</string>
+    <string name="status_default_yes_btn">已是默认浏览器</string>
+    <string name="btn_set_default">设为系统默认浏览器</string>
+    <string name="set_default_tip">成为默认浏览器后，其它应用打开 http / https 链接时会先经过本应用，你可以决定放行、指定浏览器或直接拦截。</string>
+
+    <string name="sec_default">默认打开方式</string>
+    <string name="default_none">未设置（没有规则的网址会询问你）</string>
+    <string name="default_is">默认使用：%s</string>
+    <string name="btn_pick_default">修改默认打开方式</string>
+    <string name="pick_default_title">默认用哪个浏览器打开</string>
+    <string name="default_ask_each_time">不使用默认浏览器（每次都问我）</string>
+    <string name="cb_ask">没有规则的网址每次都询问我</string>
+    <string name="cb_toast">拦截时用系统小字提示我</string>
+
+    <string name="sec_rules">网址规则（黑名单 / 指定浏览器）</string>
+    <string name="rules_empty">还没有规则。点下面的按钮，或直接在弹窗里选“加入黑名单”。</string>
+    <string name="btn_add_rule">添加网址规则</string>
+    <string name="btn_scan_browsers">重新扫描浏览器列表</string>
+    <string name="btn_app_settings">打开本应用的系统设置（授权）</string>
+    <string name="btn_open_app_settings">去授权</string>
+    <string name="scan_ok">✔ 已扫描到 %d 个可打开链接的应用</string>
+    <string name="scan_empty">✘ 没有扫描到浏览器：系统当前只让本应用看到 %d 个已安装应用</string>
+    <string name="scan_perm">“读取应用列表”权限：%s</string>
+    <string name="perm_yes">已授权</string>
+    <string name="perm_no">未授权，可能就是列表为空的原因</string>
+    <string name="add_rule_title">添加网址规则</string>
+    <string name="add_rule_hint">例如 example.com</string>
+    <string name="rule_block">已拉黑，不会打开</string>
+    <string name="rule_ask">每次询问我</string>
+    <string name="rule_app">固定使用 %s</string>
+    <string name="rule_follow_default">跟随默认设置</string>
+    <string name="pick_rule_browser">为 %s 指定浏览器</string>
+    <string name="action_block">加入黑名单（不打开）</string>
+    <string name="action_ask">每次询问我</string>
+    <string name="action_follow">跟随默认设置</string>
+    <string name="action_pick">指定某个浏览器…</string>
+
+    <string name="sec_logs">最近记录</string>
+    <string name="logs_empty">暂无记录</string>
+    <string name="btn_clear_logs">清空记录</string>
+    <string name="btn_delete">删除</string>
+    <string name="action_blocked">已拦截</string>
+    <string name="action_once">本次打开</string>
+    <string name="action_always">记住并打开</string>
+    <string name="action_opened">自动打开</string>
+
+    <string name="sec_about">关于</string>
+    <string name="about_text">LinkGuard会把自己注册成系统默认浏览器，从而接管其它应用发起的 http / https 跳转。\n\n· 弹窗里可以看到被拉起的根网址，选择“仅这一次 / 始终 / 加入黑名单”，还能一键屏蔽来源应用。\n· 黑名单：命中的网址直接丢弃，只用系统小字提示，什么界面都不弹。\n· 白名单：命中的网址直接打开，不再询问；用哪个浏览器跟随「默认打开方式」，想单独指定就到白名单里设置。\n· 应用屏蔽：某个应用拉起的所有链接一律拦下。\n· 关掉“被拉起时先弹窗询问”后，未命中名单的网址会直接用默认浏览器打开。\n\n三份名单都在各自独立的页面里维护，支持搜索。本应用不会联网，所有数据只保存在本机。</string>
+
+    <string name="cancel">取消</string>
+    <string name="ok">确定</string>
+    <string name="tag_default">默认</string>
+
+    <!-- 开关 -->
+    <string name="sec_switch">开关</string>
+    <string name="cb_show_dialog">被拉起时先弹窗询问</string>
+    <string name="cb_show_dialog_tip">关闭后：不在任何名单里的网址会直接用默认浏览器打开；没有设置默认浏览器时仍然会弹窗。</string>
+
+    <!-- 名单管理 -->
+    <string name="sec_lists">名单管理</string>
+    <string name="entry_blacklist">黑名单</string>
+    <string name="entry_whitelist">白名单</string>
+    <string name="entry_appblock">已屏蔽的应用</string>
+    <string name="entry_logs">浏览记录</string>
+    <string name="entry_fmt">%1$s（%2$d）</string>
+    <string name="lists_tip">黑名单：直接拦下，只用小字提示，什么界面都不弹。\n白名单：直接打开，不再询问；用哪个浏览器跟随「默认打开方式」，想单独指定就到白名单里设置。\n应用屏蔽：这个应用拉起的所有链接一律拦下。</string>
+
+    <!-- 列表界面 -->
+    <string name="search_hint_domain">搜索网址</string>
+    <string name="search_hint_app">搜索应用名或包名</string>
+    <string name="search_hint_log">搜索记录</string>
+    <string name="no_match">没有匹配的条目</string>
+    <string name="empty_blacklist">黑名单是空的。\n\n加入黑名单的网址不会打开，只用系统小字提示。</string>
+    <string name="empty_whitelist">白名单是空的。\n\n白名单里的网址会直接打开，不再询问 —— 用哪个浏览器跟随「默认打开方式」。\n\n点下面的按钮添加；如果某个网址想用别的浏览器（特例），添加后点这一行单独设置。</string>
+    <string name="empty_appblock">还没有屏蔽任何应用。\n\n勾选某个应用后，它拉起的所有链接都会被拦下并提示。</string>
+    <string name="empty_logs">暂无记录</string>
+    <string name="title_blacklist">黑名单</string>
+    <string name="title_whitelist">白名单</string>
+    <string name="title_appblock">已屏蔽的应用</string>
+    <string name="title_logs">浏览记录</string>
+    <string name="add_black_domain">添加黑名单网址</string>
+    <string name="add_white_domain">添加白名单网址</string>
+    <string name="add_domain">添加网址</string>
+    <string name="white_no_browser">跟随默认浏览器</string>
+    <string name="white_pick_browser">为 %1$s 指定浏览器</string>
+    <string name="white_pick_short">指定浏览器（特例）…</string>
+    <string name="white_added_follow_default">已加入白名单，将跟随默认浏览器</string>
+    <string name="use_default_browser">不指定，使用默认浏览器</string>
+    <string name="no_default_browser">不设置默认浏览器</string>
+    <string name="move_to_white">移到白名单</string>
+    <string name="move_to_black">移到黑名单</string>
+    <string name="app_block_note">勾选即屏蔽该应用拉起的所有链接。Android 14 及以上可精确识别来源应用；更早的系统只能尽力识别，识别不到时对该次跳转不生效。</string>
+    <string name="toast_app_blocked">已屏蔽 %1$s 拉起的链接</string>
+    <string name="action_app_blocked">已屏蔽来源应用</string>
+    <string name="browser_list_empty_msg_short">系统当前限制了“读取应用列表”，扫描不到其它浏览器。\n\n请到「系统设置 → 应用 → LinkGuard → 权限」里允许“读取应用列表 / 获取应用列表”。</string>
+</resources>

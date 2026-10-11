@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/lgPageBg"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            style="@style/Text.LG.Headline"
+            android:text="@string/app_name" />
+
+        <TextView
+            style="@style/Text.LG.Body"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="18dp"
+            android:text="@string/app_slogan" />
+
+        <!-- ============ 状态 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_status" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                style="@style/Text.LG.Label"
+                android:layout_marginTop="10dp"
+                android:text="@string/status_default_no"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/Text.LG.Body"
+                android:layout_marginTop="6dp"
+                android:text="@string/set_default_tip" />
+
+            <Button
+                android:id="@+id/btnSetDefault"
+                style="@style/Widget.LG.Button.Filled"
+                android:layout_marginTop="14dp"
+                android:text="@string/btn_set_default" />
+
+            <Button
+                android:id="@+id/btnAppSettings"
+                style="@style/Widget.LG.Button.Outlined"
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_app_settings" />
+        </LinearLayout>
+
+        <!-- ============ 默认打开方式 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_default" />
+
+            <TextView
+                android:id="@+id/tvDefaultBrowser"
+                style="@style/Text.LG.Label"
+                android:layout_marginTop="10dp"
+                android:text="@string/default_none" />
+
+            <Button
+                android:id="@+id/btnPickDefault"
+                style="@style/Widget.LG.Button.Tonal"
+                android:layout_marginTop="14dp"
+                android:text="@string/btn_pick_default" />
+
+            <View style="@style/Widget.LG.Divider" />
+
+            <TextView
+                android:id="@+id/tvScanResult"
+                style="@style/Text.LG.Body" />
+
+            <Button
+                android:id="@+id/btnScanBrowsers"
+                style="@style/Widget.LG.Button.Outlined"
+                android:layout_marginTop="12dp"
+                android:text="@string/btn_scan_browsers" />
+        </LinearLayout>
+
+        <!-- ============ 开关 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_switch" />
+
+            <CheckBox
+                android:id="@+id/cbShowDialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:buttonTint="?attr/lgPrimary"
+                android:text="@string/cb_show_dialog"
+                android:textColor="?attr/lgOnSurface"
+                android:textSize="15sp" />
+
+            <TextView
+                style="@style/Text.LG.Body"
+                android:layout_marginStart="6dp"
+                android:text="@string/cb_show_dialog_tip" />
+
+            <View style="@style/Widget.LG.Divider" />
+
+            <CheckBox
+                android:id="@+id/cbToast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="?attr/lgPrimary"
+                android:text="@string/cb_toast"
+                android:textColor="?attr/lgOnSurface"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- ============ 名单管理 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_lists" />
+
+            <TextView
+                style="@style/Text.LG.Body"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="14dp"
+                android:text="@string/lists_tip" />
+
+            <Button
+                android:id="@+id/btnBlacklist"
+                style="@style/Widget.LG.Button.Outlined"
+                android:text="@string/entry_blacklist" />
+
+            <Button
+                android:id="@+id/btnWhitelist"
+                style="@style/Widget.LG.Button.Outlined"
+                android:layout_marginTop="8dp"
+                android:text="@string/entry_whitelist" />
+
+            <Button
+                android:id="@+id/btnAppBlock"
+                style="@style/Widget.LG.Button.Outlined"
+                android:layout_marginTop="8dp"
+                android:text="@string/entry_appblock" />
+
+            <Button
+                android:id="@+id/btnLogs"
+                style="@style/Widget.LG.Button.Outlined"
+                android:layout_marginTop="8dp"
+                android:text="@string/entry_logs" />
+        </LinearLayout>
+
+        <!-- ============ 外观 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_theme" />
+
+            <TextView
+                android:id="@+id/tvTheme"
+                style="@style/Text.LG.Label"
+                android:layout_marginTop="10dp"
+                android:text="@string/theme_current" />
+
+            <Button
+                android:id="@+id/btnPickTheme"
+                style="@style/Widget.LG.Button.Tonal"
+                android:layout_marginTop="14dp"
+                android:text="@string/btn_pick_theme" />
+        </LinearLayout>
+
+        <!-- ============ 关于 ============ -->
+        <LinearLayout style="@style/Widget.LG.Card">
+
+            <TextView
+                style="@style/Text.LG.Title"
+                android:text="@string/sec_about" />
+
+            <TextView
+                style="@style/Text.LG.Body"
+                android:layout_marginTop="10dp"
+                android:text="@string/about_text" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
