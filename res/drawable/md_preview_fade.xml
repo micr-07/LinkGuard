@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  预览框底部的渐隐。
+  视口截长网页时，接缝必然落在内容中间，硬切一刀看着像坏了。
+  用一层「透明 -> 详情卡底色」的渐变把它溶掉，截断就变成了刻意的收边。
+  angle=90 表示从下往上，所以 startColor 是不透明的那端（在底部）。
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="90"
+        android:startColor="?attr/lgSurfaceContainerHigh"
+        android:endColor="#00FFFFFF"
+        android:type="linear" />
+</shape>

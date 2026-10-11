@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 对话框右下角的文字按钮：M3 规格 40dp 高、最小宽度 64dp、左右各 12dp。 -->
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.LG.Button.DialogAction" />

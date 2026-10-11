@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  「更多」按钮上的三个点。
+
+  画圆必须用两段半弧拼成整圆：
+      M{cx-r},{cy} a{r},{r} 0 1,0 {2r},0 a{r},{r} 0 1,0 -{2r},0
+  这样圆心才正好落在 (cx, cy)。
+
+  之前用的是单弧取巧写法 M{cx},{cy} a{r},{r} 0 1,0 0.01,0，
+  起点与终点几乎重合，圆心会掉到起点下方一个半径的位置 —— 实测偏低 2dp。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24"
+    android:tint="?attr/lgOnSurfaceVariant">
+    <!-- 左点：圆心 (6,12)，半径 2 -->
+    <path android:pathData="M4,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FFFFFFFF" />
+    <!-- 中点：圆心 (12,12) -->
+    <path android:pathData="M10,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FFFFFFFF" />
+    <!-- 右点：圆心 (18,12) -->
+    <path android:pathData="M16,12a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FFFFFFFF" />
+</vector>

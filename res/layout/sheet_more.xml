@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  「更多」底部面板。
+  顶部那条小白条（dragZone）可以上下拖：拖动改变面板高度，松手吸附到最近的一档。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sheetScrim"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+    <LinearLayout
+        android:id="@+id/sheetPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:background="@drawable/md_sheet_top"
+        android:elevation="8dp">
+
+        <!-- 拖拽区：比白条本身大得多，好按住 -->
+        <FrameLayout
+            android:id="@+id/sheetDragZone"
+            android:layout_width="match_parent"
+            android:layout_height="28dp">
+
+            <View
+                android:layout_width="32dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center"
+                android:background="@drawable/md_sheet_handle" />
+        </FrameLayout>
+
+        <ScrollView
+            android:id="@+id/sheetScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/sheetContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="16dp" />
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

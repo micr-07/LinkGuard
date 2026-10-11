@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 详情卡：比 dialog 底(白)深一档的容器色，跟随各套配色 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="?attr/lgSurfaceContainerHigh" />
+    <corners android:radius="16dp" />
+</shape>

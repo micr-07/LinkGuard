@@ -4,45 +4,44 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Locale;
 
 /**
- * 被其它应用拉起时真正执行的 Activity。
+ * 拦截页。
  *
- * <p>处理顺序：
+ * <p>决策顺序不变：
  * <ol>
- *   <li>来源应用在「应用屏蔽」名单里 → 拦下</li>
- *   <li>网址在「黑名单」里 → 拦下</li>
- *   <li>网址在「白名单」里 → 有单独指定浏览器就用它，否则跟随默认浏览器</li>
+ *   <li>来源应用被屏蔽 → 拦下</li>
+ *   <li>黑名单 → 拦下</li>
+ *   <li>白名单 → 用指定浏览器（或默认浏览器）直接打开</li>
  *   <li>关闭了「弹窗询问」→ 用默认浏览器直接打开</li>
  *   <li>其余 → 弹窗询问</li>
  * </ol>
+ *
+ * <p>弹窗按最终设计稿：标题 + 来源 + 详情卡（站点信息 + 3:2 实时预览）+ 右下角「拒绝 / 允许」。
+ * 其余动作（总是允许 / 总是拦截 / 屏蔽此应用 / 预览设置）收进右上角 ⋯ 打开的「更多」底部面板。
  */
 public class InterceptActivity extends Activity {
-
-    private static final int MODE_CHOOSE = 0;
-    private static final int MODE_ONCE = 1;
-    /** 已经加进白名单、但还没设默认浏览器：本次先让用户选一个。 */
-    private static final int MODE_NO_DEFAULT = 2;
 
     private static final int PLAN_DIALOG = 0;
     private static final int PLAN_BLOCK = 1;
@@ -62,23 +61,14 @@ public class InterceptActivity extends Activity {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private Plan plan;
-    private int mode = MODE_CHOOSE;
 
-    private LinearLayout llActions;
-    private LinearLayout llPicker;
-    private LinearLayout llBrowsers;
-    private ScrollView svBrowsers;
     private TextView tvTitle;
+    private TextView tvSub;
     private TextView tvRoot;
     private TextView tvUrl;
-    private TextView tvSource;
-    private TextView tvDefault;
-    private TextView tvPickHint;
-    private Button btnOnce;
-    private Button btnAlways;
-    private Button btnBlock;
-    private Button btnAppBlock;
-    private Button btnBack;
+    private TextView tvPreviewHint;
+    private FrameLayout boxPreview;
+    private WebView wvPreview;
 
     // ------------------------------------------------------------------
     // 生命周期
@@ -124,17 +114,16 @@ public class InterceptActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (plan != null && plan.kind == PLAN_DIALOG && mode != MODE_CHOOSE) {
-            render(MODE_CHOOSE);
-            return;
-        }
-        finish();
-    }
-
-    @Override
     protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
+        if (wvPreview != null) {
+            try {
+                wvPreview.stopLoading();
+                wvPreview.destroy();
+            } catch (Exception ignored) {
+            }
+            wvPreview = null;
+        }
         super.onDestroy();
     }
 
@@ -169,19 +158,14 @@ public class InterceptActivity extends Activity {
         p.srcPkg = sourcePackage();
         p.srcLabel = labelOf(p.srcPkg);
 
-        // 1. 来源应用被屏蔽
         if (p.srcPkg != null && Lists.isAppBlocked(this, p.srcPkg)) {
             p.kind = PLAN_APP_BLOCK;
             return p;
         }
-
-        // 2. 黑名单
         if (Lists.isBlack(this, root)) {
             p.kind = PLAN_BLOCK;
             return p;
         }
-
-        // 3. 白名单：用指定浏览器直接打开
         if (Lists.isWhite(this, root)) {
             Target t = Lists.whiteTarget(this, root);
             if (t == null) {
@@ -193,8 +177,6 @@ public class InterceptActivity extends Activity {
                 return p;
             }
         }
-
-        // 4. 关闭了弹窗询问 → 直接用默认浏览器
         if (!Prefs.showDialog(this)) {
             Target t = defaultTarget();
             if (t != null && t.valid()) {
@@ -203,8 +185,6 @@ public class InterceptActivity extends Activity {
                 return p;
             }
         }
-
-        // 5. 弹窗询问
         p.kind = PLAN_DIALOG;
         return p;
     }
@@ -221,7 +201,7 @@ public class InterceptActivity extends Activity {
         if (p.kind == PLAN_APP_BLOCK) {
             LogStore.add(this, p.root, p.url, LogStore.ACTION_APP_BLOCKED, p.srcLabel);
             if (Prefs.toastOnBlock(this)) {
-                toast(getString(R.string.toast_app_blocked, p.srcLabel));
+                toast(Lang.f(this, "toast_app_blocked", p.srcLabel));
                 finishDelayed(320);
                 return;
             }
@@ -232,7 +212,7 @@ public class InterceptActivity extends Activity {
         if (p.kind == PLAN_BLOCK) {
             LogStore.add(this, p.root, p.url, LogStore.ACTION_BLOCKED, "");
             if (Prefs.toastOnBlock(this)) {
-                toast(getString(R.string.toast_blocked, p.root));
+                toast(Lang.f(this, "toast_blocked", p.root));
                 finishDelayed(320);
                 return;
             }
@@ -246,241 +226,312 @@ public class InterceptActivity extends Activity {
                 finish();
                 return;
             }
-            // 指定的浏览器打不开，退化成询问
             String label = p.target == null ? "" : p.target.label;
-            toast(getString(R.string.toast_launch_failed, label));
+            toast(Lang.f(this, "toast_launch_failed", label));
             p.kind = PLAN_DIALOG;
         }
 
-        render(MODE_CHOOSE);
+        render();
     }
 
     // ------------------------------------------------------------------
     // 弹窗
     // ------------------------------------------------------------------
 
-    private void render(int newMode) {
-        mode = newMode;
+    private void render() {
         setContentView(R.layout.dialog_intercept);
 
         tvTitle = findViewById(R.id.tvTitle);
+        tvSub = findViewById(R.id.tvSub);
         tvRoot = findViewById(R.id.tvRoot);
         tvUrl = findViewById(R.id.tvUrl);
-        tvSource = findViewById(R.id.tvSource);
-        tvDefault = findViewById(R.id.tvDefault);
-        tvPickHint = findViewById(R.id.tvPickHint);
-        llActions = findViewById(R.id.llActions);
-        llPicker = findViewById(R.id.llPicker);
-        llBrowsers = findViewById(R.id.llBrowsers);
-        svBrowsers = findViewById(R.id.svBrowsers);
-        btnOnce = findViewById(R.id.btnOnce);
-        btnAlways = findViewById(R.id.btnAlways);
-        btnBlock = findViewById(R.id.btnBlock);
-        btnAppBlock = findViewById(R.id.btnAppBlock);
-        btnBack = findViewById(R.id.btnBack);
+        tvPreviewHint = findViewById(R.id.tvPreviewHint);
+        boxPreview = findViewById(R.id.boxPreview);
+        wvPreview = findViewById(R.id.wvPreview);
 
-        tvTitle.setText(R.string.ask_title);
+        tvTitle.setText(Lang.s(this, "dialog_title"));
         tvRoot.setText(plan.root);
         tvUrl.setText(plan.url);
+        tvSub.setText(Lang.f(this, "dialog_from", plan.srcLabel == null ? "?" : plan.srcLabel));
 
-        if (plan.srcLabel != null) {
-            tvSource.setText(getString(R.string.source_app, plan.srcLabel));
-            tvSource.setVisibility(View.VISIBLE);
-        } else {
-            tvSource.setVisibility(View.GONE);
-        }
-
-        if (mode == MODE_CHOOSE) {
-            llActions.setVisibility(View.VISIBLE);
-            llPicker.setVisibility(View.GONE);
-
-            // 把「会用哪个浏览器打开」直接写在弹窗里，免得用户猜
-            Target shown = defaultTarget();
-            if (shown != null && shown.valid()) {
-                tvDefault.setText(getString(R.string.will_open_with, shown.label));
-            } else {
-                tvDefault.setText(R.string.will_open_ask);
-            }
-            tvDefault.setVisibility(View.VISIBLE);
-
-            btnOnce.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // “仅这一次”= 用默认浏览器打开，什么都不记住
-                    Target def = defaultTarget();
-                    if (def != null && def.valid()) {
-                        if (LaunchHelper.launch(InterceptActivity.this, plan.uri, def)) {
-                            LogStore.add(InterceptActivity.this, plan.root, plan.url,
-                                    LogStore.ACTION_ONCE, def.label);
-                            finish();
-                            return;
-                        }
-                        toast(getString(R.string.toast_launch_failed, def.label));
-                    }
-                    // 还没设默认浏览器 → 选一个只用于本次
-                    render(MODE_ONCE);
-                }
-            });
-            btnAlways.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // “始终”= 加入白名单，之后跟随设置里的默认浏览器，不再询问。
-                    // 想给某个网址单独指定浏览器，到白名单页里设置（那是特例）。
-                    Lists.removeBlack(InterceptActivity.this, plan.root);
-                    Lists.addWhite(InterceptActivity.this, plan.root);
-
-                    Target def = defaultTarget();
-                    if (def != null && def.valid()
-                            && LaunchHelper.launch(InterceptActivity.this, plan.uri, def)) {
-                        LogStore.add(InterceptActivity.this, plan.root, plan.url,
-                                LogStore.ACTION_ALWAYS, def.label);
-                        toast(getString(R.string.toast_added_white, plan.root, def.label));
-                        finishDelayed(400);
-                        return;
-                    }
-                    // 还没设置默认浏览器：名单已经加好了，本次先选一个打开
-                    toast(getString(R.string.toast_white_need_default, plan.root));
-                    render(MODE_NO_DEFAULT);
-                }
-            });
-            btnBlock.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Lists.removeWhite(InterceptActivity.this, plan.root);
-                    Lists.addBlack(InterceptActivity.this, plan.root);
-                    LogStore.add(InterceptActivity.this, plan.root, plan.url,
-                            LogStore.ACTION_BLOCKED, "");
-                    toast(getString(R.string.toast_added_black, plan.root));
-                    finishDelayed(400);
-                }
-            });
-
-            if (plan.srcPkg != null) {
-                btnAppBlock.setVisibility(View.VISIBLE);
-                btnAppBlock.setText(getString(R.string.block_this_app, plan.srcLabel));
-                btnAppBlock.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Lists.setAppBlocked(InterceptActivity.this, plan.srcPkg, true);
-                        LogStore.add(InterceptActivity.this, plan.root, plan.url,
-                                LogStore.ACTION_APP_BLOCKED, plan.srcLabel);
-                        toast(getString(R.string.toast_app_blocked, plan.srcLabel));
-                        finishDelayed(400);
-                    }
-                });
-            } else {
-                btnAppBlock.setVisibility(View.GONE);
-            }
-        } else {
-            llActions.setVisibility(View.GONE);
-            llPicker.setVisibility(View.VISIBLE);
-            tvDefault.setVisibility(View.GONE);
-            tvPickHint.setText(mode == MODE_NO_DEFAULT
-                    ? getString(R.string.pick_hint_after_always, plan.root)
-                    : getString(R.string.pick_hint_once));
-            btnBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    render(MODE_CHOOSE);
-                }
-            });
-            // 选择列表只负责“用哪个打开这一次”，不再往名单里写东西
-            fillBrowsers();
-        }
-    }
-
-    private void fillBrowsers() {
-        llBrowsers.removeAllViews();
-        LayoutInflater inf = getLayoutInflater();
-
-        BrowserCatalog.Diag diag = new BrowserCatalog.Diag();
-        List<Target> list = BrowserCatalog.browsers(this, diag);
-
-        if (list.isEmpty()) {
-            TextView tv = new TextView(this);
-            tv.setText(R.string.no_browser);
-            tv.setTextSize(14f);
-            tv.setTextColor(Themes.danger(this));
-            tv.setPadding(0, dp(12), 0, dp(8));
-            llBrowsers.addView(tv);
-
-            TextView hint = new TextView(this);
-            hint.setText(getString(R.string.no_browser_hint, diag.installedVisible));
-            hint.setTextSize(12f);
-            hint.setTextColor(Themes.onSurfaceVariant(this));
-            hint.setPadding(0, 0, 0, dp(10));
-            llBrowsers.addView(hint);
-        }
-
-        for (final Target t : list) {
-            View row = inf.inflate(R.layout.item_choice, llBrowsers, false);
-            ImageView iv = row.findViewById(R.id.ivIcon);
-            TextView tv = row.findViewById(R.id.tvLabel);
-            TextView tag = row.findViewById(R.id.tvTag);
-
-            tv.setText(t.label);
-            Drawable d = LaunchHelper.iconOf(this, t);
-            if (d != null) {
-                iv.setImageDrawable(d);
-            } else {
-                iv.setImageResource(android.R.drawable.sym_def_app_icon);
-            }
-            tag.setVisibility(t.preferred ? View.VISIBLE : View.GONE);
-
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPick(t);
-                }
-            });
-            llBrowsers.addView(row);
-        }
-
-        // 兜底：交回系统的“打开方式”选择器
-        View sys = inf.inflate(R.layout.item_choice, llBrowsers, false);
-        ImageView sysIcon = sys.findViewById(R.id.ivIcon);
-        sysIcon.setImageResource(android.R.drawable.ic_menu_more);
-        TextView sysLabel = sys.findViewById(R.id.tvLabel);
-        sysLabel.setText(list.isEmpty() ? R.string.pick_system_list : R.string.pick_system_other);
-        sys.findViewById(R.id.tvTag).setVisibility(View.GONE);
-        sys.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnMore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LaunchHelper.systemPicker(InterceptActivity.this, plan.uri)) {
-                    LogStore.add(InterceptActivity.this, plan.root, plan.url,
-                            LogStore.ACTION_ONCE, getString(R.string.pick_system_short));
-                    finish();
-                } else {
-                    toast(getString(R.string.toast_launch_failed,
-                            getString(R.string.pick_system_short)));
-                }
+                showMore();
             }
         });
-        llBrowsers.addView(sys);
 
-        // 浏览器很多时限制列表高度，避免弹窗超出屏幕。
-        // 上限取「整行」的高度，免得把某一行截成半截。
-        final int rowPx = dp(58);
-        final int capPx = rowPx * 4;
-        int wSpec = View.MeasureSpec.makeMeasureSpec(
-                getResources().getDisplayMetrics().widthPixels * 72 / 100,
-                View.MeasureSpec.AT_MOST);
-        int hSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        llBrowsers.measure(wSpec, hSpec);
-        if (llBrowsers.getMeasuredHeight() > capPx) {
-            ViewGroup.LayoutParams lp = svBrowsers.getLayoutParams();
-            lp.height = capPx;
-            svBrowsers.setLayoutParams(lp);
+        tvPreviewHint.setText(Lang.s(this, "preview_loading"));
+
+        Button btnAllow = findViewById(R.id.btnAllow);
+        btnAllow.setText(Lang.s(this, "allow"));
+        btnAllow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allowOnce();
+            }
+        });
+
+        TextView btnDeny = findViewById(R.id.btnDeny);
+        btnDeny.setText(Lang.s(this, "deny"));
+        btnDeny.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogStore.add(InterceptActivity.this, plan.root, plan.url,
+                        LogStore.ACTION_DENIED, "");
+                toast(Lang.s(InterceptActivity.this, "toast_denied"));
+                finishDelayed(300);
+            }
+        });
+
+        // 预览框按 4:3 定高（高 : 宽 = 3 : 4）
+        boxPreview.post(new Runnable() {
+            @Override
+            public void run() {
+                int w = boxPreview.getWidth();
+                if (w > 0) {
+                    // 宽度必须显式钉死：applyZoom() 会把 WebView 的布局宽度设成 w/f
+                    // （60% 时是 1.67 倍），clipToOutline 只裁显示不约束布局，
+                    // 不钉死的话这个超宽子视图会把整张卡片撑出屏幕。
+                    ViewGroup.LayoutParams lp = boxPreview.getLayoutParams();
+                    lp.width = w;
+                    lp.height = w * 3 / 4;
+                    boxPreview.setLayoutParams(lp);
+                }
+                applyZoom();
+            }
+        });
+
+        // 四角补色 = 详情卡的底色，用来盖掉 WebView 溢出的直角
+        if (boxPreview instanceof RoundedBox) {
+            int behind = Themes.colorOf(this, Themes.current(this), R.attr.lgSurfaceContainerHigh);
+            RoundedBox box = (RoundedBox) boxPreview;
+            box.setCornerColor(behind);
+        }
+
+        setupPreview();
+    }
+
+    /** 预览：实时渲染真实页面，但完全不可操作。 */
+    private void setupPreview() {
+        if (!Prefs.webPreview(this)) {
+            boxPreview.setVisibility(View.GONE);
+            return;
+        }
+        boxPreview.setVisibility(View.VISIBLE);
+
+        try {
+            WebSettings s = wvPreview.getSettings();
+            s.setJavaScriptEnabled(false);
+            s.setLoadWithOverviewMode(true);
+            s.setUseWideViewPort(false);
+            s.setSupportZoom(false);
+            s.setBuiltInZoomControls(false);
+            s.setDisplayZoomControls(false);
+        } catch (Exception ignored) {
+        }
+
+        wvPreview.setBackgroundColor(0xFFFFFFFF);
+
+        // 关键：吃掉所有触摸事件 → 预览看得见、点不动、也滚不了
+        wvPreview.setClickable(false);
+        wvPreview.setLongClickable(false);
+        wvPreview.setFocusable(false);
+        wvPreview.setFocusableInTouchMode(false);
+        wvPreview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        wvPreview.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                tvPreviewHint.setVisibility(View.VISIBLE);
+                tvPreviewHint.setText(Lang.s(InterceptActivity.this, "preview_loading"));
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                tvPreviewHint.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description,
+                                        String failingUrl) {
+                tvPreviewHint.setVisibility(View.VISIBLE);
+                tvPreviewHint.setText(Lang.s(InterceptActivity.this, "preview_failed"));
+            }
+        });
+
+        applyZoom();
+        try {
+            wvPreview.loadUrl(plan.url);
+        } catch (Exception e) {
+            tvPreviewHint.setText(Lang.s(this, "preview_failed"));
         }
     }
 
-    private void onPick(Target t) {
-        if (LaunchHelper.launch(this, plan.uri, t)) {
-            LogStore.add(this, plan.root, plan.url, LogStore.ACTION_ONCE, t.label);
-            finish();
+    /**
+     * 预览缩放：整体缩放 WebView 视图。
+     * 比 setInitialScale 可靠 —— 那个方法在某些精简 android.jar 里没有。
+     */
+    private void applyZoom() {
+        if (wvPreview == null || boxPreview == null) {
             return;
         }
-        toast(getString(R.string.toast_launch_failed, t.label));
+        int cw = boxPreview.getWidth();
+        // 注意：这里不能用 getHeight()。
+        // 外部刚用 post() 改过框高，此刻布局还没跑，getHeight() 还是旧值，
+        // 会导致 WebView 按旧高度算尺寸，撑不满新框（底部空一大块）。
+        // 直接读刚写进去的布局参数才是本次真正的高度。
+        android.view.ViewGroup.LayoutParams blp = boxPreview.getLayoutParams();
+        int ch = blp != null && blp.height > 0 ? blp.height : boxPreview.getHeight();
+        if (cw <= 0 || ch <= 0) {
+            return;
+        }
+        float f = Prefs.zoom(this) / 100f;
+        // 关键：先把 WebView 的布局尺寸放大 1/f，让页面按更宽的视口重排，
+        // 再整体缩回 f —— 这样 60% 是「看得更多」，而不是把内容缩成一小块留在角上。
+        ViewGroup.LayoutParams lp = wvPreview.getLayoutParams();
+        lp.width = (int) (cw / f);
+        lp.height = (int) (ch / f);
+        wvPreview.setLayoutParams(lp);
+        wvPreview.setPivotX(0f);
+        wvPreview.setPivotY(0f);
+        wvPreview.setScaleX(f);
+        wvPreview.setScaleY(f);
+    }
+
+    /** 「允许」：有默认浏览器就直接开，没有就让用户挑一个。 */
+    private void allowOnce() {
+        Target def = defaultTarget();
+        if (def != null && def.valid()) {
+            if (LaunchHelper.launch(this, plan.uri, def)) {
+                LogStore.add(this, plan.root, plan.url, LogStore.ACTION_ONCE, def.label);
+                finishDelayed(300);
+            } else {
+                toast(Lang.f(this, "toast_launch_failed", def.label));
+            }
+            return;
+        }
+        Dialogs.pickBrowser(this, Lang.s(this, "pick_default_title"), false,
+                new Dialogs.OnPick() {
+                    @Override
+                    public void onPick(Target t, boolean useDefault) {
+                        if (t != null && LaunchHelper.launch(InterceptActivity.this, plan.uri, t)) {
+                            LogStore.add(InterceptActivity.this, plan.root, plan.url,
+                                    LogStore.ACTION_ONCE, t.label);
+                            finishDelayed(300);
+                        } else {
+                            toast(Lang.s(InterceptActivity.this, "toast_launch_failed"));
+                        }
+                    }
+                });
+    }
+
+    /** 右上角 ⋯ →「更多」底部面板。 */
+    private void showMore() {
+        MoreSheet.create(this)
+                .build(plan.root, plan.srcLabel, new MoreSheet.Callbacks() {
+                    @Override
+                    public void onAlwaysAllow() {
+                        Lists.removeBlack(InterceptActivity.this, plan.root);
+                        Lists.addWhite(InterceptActivity.this, plan.root);
+                        LogStore.add(InterceptActivity.this, plan.root, plan.url,
+                                LogStore.ACTION_ALWAYS, plan.root);
+                        toast(Lang.f(InterceptActivity.this, "toast_allow_all", plan.root));
+                        Target def = defaultTarget();
+                        if (def != null && def.valid()) {
+                            LaunchHelper.launch(InterceptActivity.this, plan.uri, def);
+                        }
+                        finishDelayed(400);
+                    }
+
+                    @Override
+                    public void onAlwaysBlock() {
+                        Lists.removeWhite(InterceptActivity.this, plan.root);
+                        Lists.addBlack(InterceptActivity.this, plan.root);
+                        LogStore.add(InterceptActivity.this, plan.root, plan.url,
+                                LogStore.ACTION_BLOCKED, "");
+                        toast(Lang.f(InterceptActivity.this, "toast_block_all", plan.root));
+                        finishDelayed(400);
+                    }
+
+                    @Override
+                    public void onBlockApp() {
+                        confirmAppBlock();
+                    }
+
+                    @Override
+                    public void onOpenHome() {
+                        try {
+                            startActivity(new Intent(InterceptActivity.this, MainActivity.class));
+                        } catch (Exception ignored) {
+                        }
+                        finish();
+                    }
+
+                    @Override
+                    public void onZoom() {
+                        pickZoom();
+                    }
+
+                    @Override
+                    public void onPreviewToggle(boolean on) {
+                        if (boxPreview != null) {
+                            boxPreview.setVisibility(on ? View.VISIBLE : View.GONE);
+                        }
+                        if (on && wvPreview != null && wvPreview.getUrl() == null) {
+                            setupPreview();
+                        }
+                    }
+                })
+                .show();
+    }
+
+    /** 缩放：直接输数字，枚举太别扭。 */
+    private void pickZoom() {
+        MdDialog.create(this)
+                .title(Lang.s(this, "zoom_title"))
+                .message(Lang.f(this, "preview_zoom_hint", Prefs.ZOOM_MIN, Prefs.ZOOM_MAX))
+                .content(Dialogs.zoomField(this, Prefs.zoom(this)))
+                .negative(Lang.s(this, "cancel"), null)
+                .positive(Lang.s(this, "ok"), new MdDialog.OnClick() {
+                    @Override
+                    public void onClick() {
+                        int v = Dialogs.zoomValue(InterceptActivity.this, Prefs.zoom(InterceptActivity.this));
+                        if (v < Prefs.ZOOM_MIN || v > Prefs.ZOOM_MAX) {
+                            toast(Lang.s(InterceptActivity.this, "zoom_invalid"));
+                            return;
+                        }
+                        Prefs.setZoom(InterceptActivity.this, v);
+                        applyZoom();
+                    }
+                })
+                .show();
+    }
+
+    /** 屏蔽整个应用是最强一级拦截，按系统惯例做二次确认。 */
+    private void confirmAppBlock() {
+        final String pkg = plan.srcPkg;
+        final String label = plan.srcLabel;
+        MdDialog.create(this)
+                .title(Lang.f(this, "app_block_confirm_title", label))
+                .message(Lang.s(this, "app_block_confirm_msg"))
+                .negative(Lang.s(this, "cancel"), null)
+                .positiveDanger(Lang.s(this, "app_block_confirm_ok"), new MdDialog.OnClick() {
+                    @Override
+                    public void onClick() {
+                        Lists.setAppBlocked(InterceptActivity.this, pkg, true);
+                        LogStore.add(InterceptActivity.this, plan.root, plan.url,
+                                LogStore.ACTION_APP_BLOCKED, label);
+                        toast(Lang.f(InterceptActivity.this, "app_block_done", label));
+                        finishDelayed(400);
+                    }
+                })
+                .show();
     }
 
     // ------------------------------------------------------------------
@@ -488,7 +539,6 @@ public class InterceptActivity extends Activity {
     // ------------------------------------------------------------------
 
     private String sourcePackage() {
-        // 1. Android 14+ 的公开 API
         if (Build.VERSION.SDK_INT >= 34) {
             try {
                 String s = getLaunchedFromPackage();
@@ -498,7 +548,6 @@ public class InterceptActivity extends Activity {
             } catch (Throwable ignored) {
             }
         }
-        // 2. 反射 getLaunchedFromPackage()（Android 10~13 上属于浅灰名单，通常可用）
         try {
             Method m = Activity.class.getMethod("getLaunchedFromPackage");
             Object r = m.invoke(this);
@@ -510,7 +559,6 @@ public class InterceptActivity extends Activity {
             }
         } catch (Throwable ignored) {
         }
-        // 3. 反射 getLaunchedFromUid()，再用 uid 反查包名
         try {
             Method m = Activity.class.getMethod("getLaunchedFromUid");
             Object r = m.invoke(this);
@@ -527,7 +575,6 @@ public class InterceptActivity extends Activity {
             }
         } catch (Throwable ignored) {
         }
-        // 4. referrer
         try {
             Uri ref = getReferrer();
             if (ref != null && "android-app".equals(ref.getScheme())) {
@@ -576,9 +623,5 @@ public class InterceptActivity extends Activity {
                 finish();
             }
         }, ms);
-    }
-
-    private int dp(int v) {
-        return (int) (v * getResources().getDisplayMetrics().density + 0.5f);
     }
 }

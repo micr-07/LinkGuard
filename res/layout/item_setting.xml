@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  M3 List 的一行。
+  单行 56dp / 双行 72dp：由内容撑开，minHeight 兜底；左右各 16dp。
+  尾部按需显示「取值 + 箭头」或「开关」。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/rowIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@null"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/rowTitle"
+            style="@style/Text.LG.RowTitle" />
+
+        <TextView
+            android:id="@+id/rowSub"
+            style="@style/Text.LG.RowSub"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rowValue"
+        style="@style/Text.LG.RowValue"
+        android:layout_marginStart="12dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/rowChevron"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_chevron_right"
+        android:visibility="gone" />
+
+    <!-- 故意不给 id：多行共用同一个 id 会让框架的状态保存/恢复串台，
+         恢复时 setChecked() 会触发监听器反过来把配置写坏。
+         没有 id 就不参与保存/恢复，代码里按类型找它。 -->
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:visibility="gone" />
+</LinearLayout>

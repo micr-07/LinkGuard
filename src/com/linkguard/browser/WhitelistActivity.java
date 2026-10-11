@@ -1,7 +1,7 @@
 package com.linkguard.browser;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,18 +26,18 @@ public class WhitelistActivity extends ListActivityBase {
     }
 
     @Override
-    protected int searchHintRes() {
-        return R.string.search_hint_domain;
+    protected String searchHint() {
+        return Lang.s(this, "search_hint_domain");
     }
 
     @Override
-    protected int addButtonRes() {
-        return R.string.add_white_domain;
+    protected String addButtonLabel() {
+        return Lang.s(this, "add_white_domain");
     }
 
     @Override
-    protected int emptyRes() {
-        return R.string.empty_whitelist;
+    protected String emptyText() {
+        return Lang.s(this, "empty_whitelist");
     }
 
     @Override
@@ -48,8 +48,8 @@ public class WhitelistActivity extends ListActivityBase {
             Target t = Lists.whiteTarget(this, domain);
             r.title = domain;
             r.subtitle = t == null
-                    ? getString(R.string.white_no_browser)
-                    : getString(R.string.rule_app, t.label);
+                    ? Lang.s(this, "white_no_browser")
+                    : Lang.f(this, "rule_app", t.label);
             rows.add(r);
         }
         return rows;
@@ -57,15 +57,15 @@ public class WhitelistActivity extends ListActivityBase {
 
     @Override
     protected void onRowClicked(final RowAdapter.Row row) {
-        new AlertDialog.Builder(this)
-                .setTitle(row.key)
-                .setItems(new String[]{
-                        getString(R.string.white_pick_short),
-                        getString(R.string.move_to_black),
-                        getString(R.string.btn_delete)},
-                        new DialogInterface.OnClickListener() {
+        MdDialog.create(this)
+                .title(row.key)
+                .items(new CharSequence[]{
+                        Lang.s(this, "white_pick_short"),
+                        Lang.s(this, "move_to_black"),
+                        Lang.s(this, "btn_delete")},
+                        new MdDialog.OnItem() {
                             @Override
-                            public void onClick(DialogInterface d, int which) {
+                            public void onItem(int which) {
                                 if (which == 0) {
                                     pickBrowserFor(row.key);
                                 } else if (which == 1) {
@@ -78,12 +78,12 @@ public class WhitelistActivity extends ListActivityBase {
                                 }
                             }
                         })
-                .setNegativeButton(R.string.cancel, null)
+                .negative(Lang.s(this, "cancel"), null)
                 .show();
     }
 
     private void pickBrowserFor(final String domain) {
-        Dialogs.pickBrowser(this, getString(R.string.white_pick_browser, domain), true,
+        Dialogs.pickBrowser(this, Lang.f(this, "white_pick_browser", domain), true,
                 new Dialogs.OnPick() {
                     @Override
                     public void onPick(Target target, boolean useDefault) {
@@ -101,7 +101,7 @@ public class WhitelistActivity extends ListActivityBase {
 
     @Override
     protected void onAddClicked() {
-        Dialogs.inputDomain(this, R.string.add_white_domain, R.string.add_rule_hint,
+        Dialogs.inputDomain(this, Lang.s(this, "add_white_domain"), Lang.s(this, "add_rule_hint"),
                 new Dialogs.OnText() {
                     @Override
                     public void onText(String text) {
@@ -111,7 +111,7 @@ public class WhitelistActivity extends ListActivityBase {
                         Lists.addWhite(WhitelistActivity.this, text);
                         reload();
                         Toast.makeText(WhitelistActivity.this,
-                                getString(R.string.white_added_follow_default),
+                                Lang.s(WhitelistActivity.this, "white_added_follow_default"),
                                 Toast.LENGTH_LONG).show();
                     }
                 });

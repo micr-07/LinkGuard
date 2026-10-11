@@ -7,6 +7,10 @@
     <attr name="lgOnPrimaryContainer" format="color" />
     <attr name="lgSurface" format="color" />
     <attr name="lgSurfaceVariant" format="color" />
+    <attr name="lgSurfaceContainer" format="color" />
+    <attr name="lgSurfaceContainerHigh" format="color" />
+    <!-- 状态层（点击水波纹）：on 色 + 低透明度，不能直接用实色 -->
+    <attr name="lgRipple" format="color" />
     <attr name="lgOnSurface" format="color" />
     <attr name="lgOnSurfaceVariant" format="color" />
     <attr name="lgOutline" format="color" />
@@ -14,4 +18,8 @@
     <attr name="lgDanger" format="color" />
     <attr name="lgDangerContainer" format="color" />
     <attr name="lgPageBg" format="color" />
+    <!-- RoundedBox：能把子视图（包括 WebView）裁成圆角的容器 -->
+    <declare-styleable name="RoundedBox">
+        <attr name="lgRadius" format="dimension" />
+    </declare-styleable>
 </resources>

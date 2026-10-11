@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  M3 实心图标按钮的容器：40dp 圆，底色 primaryContainer。
+
+  ripple 的 android:color 是「水波纹的颜色」，不是底色 —— 之前误用了
+  不透明的 lgOnPrimaryContainer（近黑），一点下去整个圆就被盖成深色。
+  状态层应当是 on 色 + 低透明度，所以单独定义了 lgRipple（12% alpha）。
+-->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/lgRipple">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?attr/lgPrimaryContainer" />
+        </shape>
+    </item>
+</ripple>

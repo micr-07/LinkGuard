@@ -35,104 +35,122 @@
 
     <!-- 默认蓝 -->
     <style name="Theme.LG.Blue" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF0B57D0</item>
+        <item name="lgPrimary">#FF0A4CB5</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FFD3E3FD</item>
         <item name="lgOnPrimaryContainer">#FF041E49</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFE3E2E8</item>
+        <item name="lgRipple">#1F041E49</item>
+        <item name="lgSurface">#FFFCFCFD</item>
+        <item name="lgSurfaceVariant">#FFD0D8E4</item>
+        <item name="lgSurfaceContainer">#FFE6EBF2</item>
+        <item name="lgSurfaceContainerHigh">#FFD8DFEC</item>
         <item name="lgOnSurface">#FF1A1C1E</item>
         <item name="lgOnSurfaceVariant">#FF44474F</item>
         <item name="lgOutline">#FF9AA0AA</item>
-        <item name="lgOutlineVariant">#FFE0E5EC</item>
+        <item name="lgOutlineVariant">#FFC1C9D7</item>
         <item name="lgDanger">#FFBA1A1A</item>
         <item name="lgDangerContainer">#FFFFDAD6</item>
-        <item name="lgPageBg">#FFF6F8FC</item>
+        <item name="lgPageBg">#FFF2F4F7</item>
     </style>
 
     <!-- 紫（Material 3 基线） -->
     <style name="Theme.LG.Purple" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF6750A4</item>
+        <item name="lgPrimary">#FF5A468F</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FFEADDFF</item>
         <item name="lgOnPrimaryContainer">#FF21005D</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFE7E0EC</item>
+        <item name="lgRipple">#1F21005D</item>
+        <item name="lgSurface">#FFFCFCFD</item>
+        <item name="lgSurfaceVariant">#FFD6D0E4</item>
+        <item name="lgSurfaceContainer">#FFE9E6F2</item>
+        <item name="lgSurfaceContainerHigh">#FFDDD8EC</item>
         <item name="lgOnSurface">#FF1D1B20</item>
         <item name="lgOnSurfaceVariant">#FF49454F</item>
         <item name="lgOutline">#FF9C96A3</item>
-        <item name="lgOutlineVariant">#FFE6E0EA</item>
+        <item name="lgOutlineVariant">#FFC7C1D7</item>
         <item name="lgDanger">#FFB3261E</item>
         <item name="lgDangerContainer">#FFF9DEDC</item>
-        <item name="lgPageBg">#FFF8F5FB</item>
+        <item name="lgPageBg">#FFF4F2F7</item>
     </style>
 
     <!-- 青 -->
     <style name="Theme.LG.Teal" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF00696D</item>
+        <item name="lgPrimary">#FF005B5F</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FF9CF1F3</item>
         <item name="lgOnPrimaryContainer">#FF002021</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFDAE4E5</item>
+        <item name="lgRipple">#1F002021</item>
+        <item name="lgSurface">#FFFCFDFD</item>
+        <item name="lgSurfaceVariant">#FFD0E3E4</item>
+        <item name="lgSurfaceContainer">#FFE6F1F2</item>
+        <item name="lgSurfaceContainerHigh">#FFD8EBEC</item>
         <item name="lgOnSurface">#FF191C1D</item>
         <item name="lgOnSurfaceVariant">#FF3F4849</item>
         <item name="lgOutline">#FF93A0A1</item>
-        <item name="lgOutlineVariant">#FFDDE7E8</item>
+        <item name="lgOutlineVariant">#FFC1D6D7</item>
         <item name="lgDanger">#FFBA1A1A</item>
         <item name="lgDangerContainer">#FFFFDAD6</item>
-        <item name="lgPageBg">#FFF5FAFA</item>
+        <item name="lgPageBg">#FFF2F7F7</item>
     </style>
 
     <!-- 绿 -->
     <style name="Theme.LG.Green" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF3B6939</item>
+        <item name="lgPrimary">#FF335B32</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FFBCF0B4</item>
         <item name="lgOnPrimaryContainer">#FF002204</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFDEE5DA</item>
+        <item name="lgRipple">#1F002204</item>
+        <item name="lgSurface">#FFFCFDFC</item>
+        <item name="lgSurfaceVariant">#FFD1E4D0</item>
+        <item name="lgSurfaceContainer">#FFE7F2E6</item>
+        <item name="lgSurfaceContainerHigh">#FFD9ECD8</item>
         <item name="lgOnSurface">#FF191D18</item>
         <item name="lgOnSurfaceVariant">#FF424940</item>
         <item name="lgOutline">#FF96A093</item>
-        <item name="lgOutlineVariant">#FFE1E8DE</item>
+        <item name="lgOutlineVariant">#FFC2D7C1</item>
         <item name="lgDanger">#FFBA1A1A</item>
         <item name="lgDangerContainer">#FFFFDAD6</item>
-        <item name="lgPageBg">#FFF7FAF5</item>
+        <item name="lgPageBg">#FFF2F7F2</item>
     </style>
 
     <!-- 橙 -->
     <style name="Theme.LG.Orange" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF8B5000</item>
+        <item name="lgPrimary">#FF794600</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FFFFDCBE</item>
         <item name="lgOnPrimaryContainer">#FF2D1600</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFF0E0D2</item>
+        <item name="lgRipple">#1F2D1600</item>
+        <item name="lgSurface">#FFFDFCFC</item>
+        <item name="lgSurfaceVariant">#FFE4DBD0</item>
+        <item name="lgSurfaceContainer">#FFF2EDE6</item>
+        <item name="lgSurfaceContainerHigh">#FFECE3D8</item>
         <item name="lgOnSurface">#FF201A16</item>
         <item name="lgOnSurfaceVariant">#FF52443A</item>
         <item name="lgOutline">#FFA08D80</item>
-        <item name="lgOutlineVariant">#FFEDE0D5</item>
+        <item name="lgOutlineVariant">#FFD7CEC1</item>
         <item name="lgDanger">#FFBA1A1A</item>
         <item name="lgDangerContainer">#FFFFDAD6</item>
-        <item name="lgPageBg">#FFFDF7F2</item>
+        <item name="lgPageBg">#FFF7F5F2</item>
     </style>
 
     <!-- 玫红 -->
     <style name="Theme.LG.Pink" parent="Theme.LG.Light">
-        <item name="lgPrimary">#FF9C4059</item>
+        <item name="lgPrimary">#FF88384D</item>
         <item name="lgOnPrimary">#FFFFFFFF</item>
         <item name="lgPrimaryContainer">#FFFFD9E1</item>
         <item name="lgOnPrimaryContainer">#FF3F0017</item>
-        <item name="lgSurface">#FFFFFFFF</item>
-        <item name="lgSurfaceVariant">#FFF2DEE2</item>
+        <item name="lgRipple">#1F3F0017</item>
+        <item name="lgSurface">#FFFDFCFC</item>
+        <item name="lgSurfaceVariant">#FFE4D0D6</item>
+        <item name="lgSurfaceContainer">#FFF2E6E9</item>
+        <item name="lgSurfaceContainerHigh">#FFECD8DD</item>
         <item name="lgOnSurface">#FF201A1B</item>
         <item name="lgOnSurfaceVariant">#FF514347</item>
         <item name="lgOutline">#FFA18C90</item>
-        <item name="lgOutlineVariant">#FFEFDDE1</item>
+        <item name="lgOutlineVariant">#FFD7C1C7</item>
         <item name="lgDanger">#FFBA1A1A</item>
         <item name="lgDangerContainer">#FFFFDAD6</item>
-        <item name="lgPageBg">#FFFDF6F8</item>
+        <item name="lgPageBg">#FFF7F2F4</item>
     </style>
 
     <!-- 深色 -->
@@ -141,15 +159,18 @@
         <item name="lgOnPrimary">#FF002E69</item>
         <item name="lgPrimaryContainer">#FF0842A0</item>
         <item name="lgOnPrimaryContainer">#FFD3E3FD</item>
-        <item name="lgSurface">#FF1E1F24</item>
-        <item name="lgSurfaceVariant">#FF2B2930</item>
+        <item name="lgRipple">#1FD3E3FD</item>
+        <item name="lgSurface">#FF181B21</item>
+        <item name="lgSurfaceVariant">#FF2C3442</item>
+        <item name="lgSurfaceContainer">#FF1E232C</item>
+        <item name="lgSurfaceContainerHigh">#FF252C37</item>
         <item name="lgOnSurface">#FFE5E1E6</item>
         <item name="lgOnSurfaceVariant">#FFCAC4D0</item>
         <item name="lgOutline">#FF8E9099</item>
-        <item name="lgOutlineVariant">#FF33353B</item>
+        <item name="lgOutlineVariant">#FF374150</item>
         <item name="lgDanger">#FFFFB4AB</item>
         <item name="lgDangerContainer">#FF93000A</item>
-        <item name="lgPageBg">#FF101014</item>
+        <item name="lgPageBg">#FF0F1217</item>
     </style>
 
     <!-- ================================================================
@@ -232,13 +253,56 @@
          MD3 排版
          ================================================================ -->
 
+    <!-- M3 title large：22sp / 28sp / 0 / Regular -->
     <style name="Text.LG.Headline" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">?attr/lgOnSurface</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- M3 title small：14sp / 20sp / 0.1sp / Medium（用分组标题） -->
+    <style name="Text.LG.Section" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <!-- 列表行：标题 body large 16sp -->
+    <style name="Text.LG.RowTitle" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- 列表行：副标题 body small 12sp -->
+    <style name="Text.LG.RowSub" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <!-- 列表行：尾部取值 body medium 14sp -->
+    <style name="Text.LG.RowValue" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurfaceVariant</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- M3 List 容器：CornerLarge 16dp -->
+    <style name="Widget.LG.List" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/md_list</item>
     </style>
 
     <style name="Text.LG.Title" parent="">
@@ -253,8 +317,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">?attr/lgOnSurfaceVariant</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4dp</item>
     </style>
 
     <style name="Text.LG.Label" parent="">
@@ -282,7 +346,7 @@
         <item name="android:layout_marginBottom">12dp</item>
         <item name="android:background">@drawable/md_card</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:padding">18dp</item>
+        <item name="android:padding">16dp</item>
     </style>
 
     <style name="Widget.LG.Divider" parent="">
@@ -300,7 +364,7 @@
     <style name="Widget.LG.Button" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">48dp</item>
+        <item name="android:minHeight">56dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">false</item>
@@ -368,6 +432,44 @@
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <!-- 状态卡：整屏唯一放按钮的地方 -->
+    <style name="Widget.LG.StatusCard" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:background">@drawable/md_card</item>
+    </style>
+
+    <!-- M3 Text button：次要动作，无容器，40dp -->
+    <style name="Widget.LG.Button.Text" parent="@style/Widget.LG.Button">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textColor">?attr/lgPrimary</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+
+    <!-- M3 headline small：对话框标题（22sp 是对中文的让步，规范为 24sp） -->
+    <style name="Text.LG.DialogTitle" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/lgOnSurface</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- M3 对话框动作：文字按钮，40dp / 最小 64dp -->
+    <style name="Widget.LG.Button.DialogAction" parent="@style/Widget.LG.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textColor">?attr/lgPrimary</item>
     </style>
 
 </resources>

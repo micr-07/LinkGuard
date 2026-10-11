@@ -37,6 +37,7 @@ public abstract class ListActivityBase extends Activity {
         addButton = findViewById(R.id.addButton);
 
         View back = findViewById(R.id.btnBack);
+        back.setContentDescription(Lang.s(this, "back"));
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +77,7 @@ public abstract class ListActivityBase extends Activity {
 
         if (showSearch()) {
             searchBox.setVisibility(View.VISIBLE);
-            searchBox.setHint(searchHintRes());
+            searchBox.setHint(searchHint());
             searchBox.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int a, int b, int c) {
@@ -96,8 +97,8 @@ public abstract class ListActivityBase extends Activity {
             searchBox.setVisibility(View.GONE);
         }
 
-        int addRes = addButtonRes();
-        if (addRes != 0) {
+        String addRes = addButtonLabel();
+        if (addRes != null) {
             addButton.setVisibility(View.VISIBLE);
             addButton.setText(addRes);
             addButton.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +111,8 @@ public abstract class ListActivityBase extends Activity {
             addButton.setVisibility(View.GONE);
         }
 
-        int note = noteRes();
-        if (note != 0) {
+        String note = note();
+        if (note != null) {
             noteView.setVisibility(View.VISIBLE);
             noteView.setText(note);
         } else {
@@ -132,10 +133,10 @@ public abstract class ListActivityBase extends Activity {
 
     protected void updateEmpty() {
         if (adapter.getTotalCount() == 0) {
-            emptyView.setText(emptyRes());
+            emptyView.setText(emptyText());
             emptyView.setVisibility(View.VISIBLE);
         } else if (adapter.getCount() == 0) {
-            emptyView.setText(R.string.no_match);
+            emptyView.setText(Lang.s(this, "no_match"));
             emptyView.setVisibility(View.VISIBLE);
         } else {
             emptyView.setVisibility(View.GONE);
@@ -146,8 +147,8 @@ public abstract class ListActivityBase extends Activity {
         return true;
     }
 
-    protected int noteRes() {
-        return 0;
+    protected String note() {
+        return null;
     }
 
     protected abstract boolean showSearch();
@@ -156,12 +157,12 @@ public abstract class ListActivityBase extends Activity {
 
     protected abstract boolean showIcon();
 
-    protected abstract int searchHintRes();
+    protected abstract String searchHint();
 
     /** 底部按钮文字，0 表示不显示。 */
-    protected abstract int addButtonRes();
+    protected abstract String addButtonLabel();
 
-    protected abstract int emptyRes();
+    protected abstract String emptyText();
 
     protected abstract List<RowAdapter.Row> buildRows();
 

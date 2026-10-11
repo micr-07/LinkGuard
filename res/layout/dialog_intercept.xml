@@ -1,124 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  拦截弹窗（MD3）。
+  结构照最终设计稿：标题行（含右上角 ⋯）+ supporting text + 详情卡（站点信息 + 3:2 实时预览）
+  + 右下角动作（拒绝 文字按钮 / 允许 实心按钮）。
+  预览用 WebView 实时渲染，但完全不可操作（触摸事件被吃掉）。
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#99000000">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/md_dialog_card"
-        android:elevation="12dp"
         android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/dlgCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:orientation="vertical"
-            android:paddingStart="24dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="20dp">
+            android:background="@drawable/md_dialog_card"
+            android:elevation="6dp">
 
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/Text.LG.Body"
-                android:text="@string/ask_title" />
-
-            <TextView
-                android:id="@+id/tvRoot"
-                style="@style/Text.LG.Headline"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:maxLines="2" />
-
-            <TextView
-                android:id="@+id/tvUrl"
-                style="@style/Text.LG.Body"
-                android:layout_marginTop="6dp"
-                android:ellipsize="middle"
-                android:maxLines="3"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tvSource"
-                style="@style/Text.LG.Body"
-                android:layout_marginTop="10dp"
-                android:textSize="12sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvDefault"
-                style="@style/Text.LG.Body"
-                android:layout_marginTop="10dp"
-                android:textSize="12sp" />
-
+            <!-- 标题 + 右上角「更多」。
+                 paddingTop / paddingEnd 都取 28dp：这样 40dp 的圆形按钮到弹窗上边和
+                 右边的距离完全相等，四角对称。 -->
             <LinearLayout
-                android:id="@+id/llActions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="20dp">
 
-                <Button
-                    android:id="@+id/btnOnce"
-                    style="@style/Widget.LG.Button.Filled"
-                    android:text="@string/opt_once" />
+                <!-- marginBottom 1dp：把标题整体上抬 0.5dp，去对齐右边圆形的视觉中心。
+                     中文字形坐在基线上，而行框还留有下行字母的空间，框中心比字形中心低。
+                     抬文字而不是降圆，是为了保住 28dp/28dp 的四角对称。 -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    style="@style/Text.LG.DialogTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="1dp"
+                    android:includeFontPadding="false" />
 
-                <Button
-                    android:id="@+id/btnAlways"
-                    style="@style/Widget.LG.Button.Tonal"
+                <ImageView
+                    android:id="@+id/btnMore"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_more"
+                    android:tint="?attr/lgOnPrimaryContainer"
+                    android:background="@drawable/md_icon_button_bg"
+                    android:contentDescription="@null" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvSub"
+                style="@style/Text.LG.Body"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:id="@+id/boxDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/md_detail_box"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/md_circle_container">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_globe_small"
+                            android:contentDescription="@null" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvRoot"
+                            style="@style/Text.LG.RowTitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvUrl"
+                            style="@style/Text.LG.RowSub"
+                            android:ellipsize="middle"
+                            android:maxLines="1" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 用 RoundedBox 而不是 clipToOutline：
+                     WebView 有自己的图层，outline 裁不到它，会露出直角。 -->
+                <com.linkguard.browser.RoundedBox
+                    android:id="@+id/boxPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/opt_always" />
+                    android:background="@drawable/md_preview_card"
+                    app:lgRadius="12dp">
 
-                <Button
-                    android:id="@+id/btnBlock"
-                    style="@style/Widget.LG.Button.Outlined.Danger"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/opt_block" />
+                    <WebView
+                        android:id="@+id/wvPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                <Button
-                    android:id="@+id/btnAppBlock"
-                    style="@style/Widget.LG.Button.Outlined.Danger"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/block_this_app"
-                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/tvPreviewHint"
+                        style="@style/Text.LG.RowSub"
+                        android:layout_gravity="center"
+                        android:gravity="center" />
+
+                    <!-- 底部渐隐：盖住视口截断的接缝 -->
+                </com.linkguard.browser.RoundedBox>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="horizontal"
+                android:gravity="end|center_vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="8dp">
 
                 <TextView
-                    android:id="@+id/tvPickHint"
-                    style="@style/Text.LG.Body"
-                    android:text="@string/pick_hint_once" />
-
-                <ScrollView
-                    android:id="@+id/svBrowsers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:scrollbars="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/llBrowsers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-                </ScrollView>
+                    android:id="@+id/btnDeny"
+                    style="@style/Widget.LG.Button.DialogAction" />
 
                 <Button
-                    android:id="@+id/btnBack"
-                    style="@style/Widget.LG.Button.Outlined"
-                    android:layout_marginTop="14dp"
-                    android:text="@string/opt_back" />
+                    android:id="@+id/btnAllow"
+                    style="@style/Widget.LG.Button.Filled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:minWidth="80dp"
+                    android:layout_marginStart="8dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

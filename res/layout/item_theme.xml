@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  配色方案的一行：左边一个圆点，取该方案 primary / primaryContainer 里更深的那一个
+  （深色方案的主色本身是浅蓝，取更深的一档才不会看起来像浅色主题）。
+  圆点颜色在代码里按各方案解析后填入。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="52dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <View
+        android:id="@+id/themeSwatch"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:id="@+id/themeName"
+        style="@style/Text.LG.RowTitle"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/themeUsing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:textSize="12sp"
+        android:textColor="?attr/lgPrimary"
+        android:text="@string/theme_in_use"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/themeCheck"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_check"
+        android:contentDescription="@null"
+        android:visibility="gone" />
+</LinearLayout>

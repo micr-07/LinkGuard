@@ -1,9 +1,10 @@
 package com.linkguard.browser;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
+
 import android.view.inputmethod.InputMethodManager;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -25,34 +26,62 @@ public final class Dialogs {
     private Dialogs() {
     }
 
-    /** 输入一个网址（会自动归一化成根网址）。 */
-    public static void inputDomain(final Activity act, int titleRes, int hintRes, final OnText cb) {
+    /**
+     * 缩放输入框：只让输数字，回车即确认。
+     * 输入框自己记住引用，值在 {@link #zoomValue} 里取。
+     */
+    private static EditText lastZoomField;
+
+    public static View zoomField(Activity act, int current) {
         final EditText et = new EditText(act);
-        et.setHint(hintRes);
+        et.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        et.setSingleLine(true);
+        et.setText(String.valueOf(current));
+        et.setSelection(et.getText().length());
+        et.setBackgroundResource(R.drawable.md_field);
+        int pad = (int) (16 * act.getResources().getDisplayMetrics().density);
+        et.setPadding(pad, pad / 2, pad, pad / 2);
+        lastZoomField = et;
+        return et;
+    }
+
+    /** 读缩放输入框的值；非法就返回原值。 */
+    public static int zoomValue(Activity act, int fallback) {
+        if (lastZoomField == null) {
+            return fallback;
+        }
+        try {
+            int v = Integer.parseInt(lastZoomField.getText().toString().trim());
+            return v;
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+    /** 输入一个网址（会自动归一化成根网址）。 */
+    public static void inputDomain(final Activity act, String title, String hint, final OnText cb) {
+        final EditText et = new EditText(act);
+        et.setHint(hint);
         et.setSingleLine(true);
         et.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_URI);
 
-        FrameLayout wrap = new FrameLayout(act);
-        int pad = (int) (20 * act.getResources().getDisplayMetrics().density);
-        wrap.setPadding(pad, pad / 2, pad, 0);
-        wrap.addView(et, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        et.setBackgroundResource(R.drawable.md_field);
+        int pad = (int) (16 * act.getResources().getDisplayMetrics().density);
+        et.setPadding(pad, pad / 2, pad, pad / 2);
 
-        AlertDialog dlg = new AlertDialog.Builder(act)
-                .setTitle(titleRes)
-                .setView(wrap)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        MdDialog.create(act)
+                .title(title)
+                .content(et)
+                .negative(Lang.s(act, "cancel"), null)
+                .positive(Lang.s(act, "ok"), new MdDialog.OnClick() {
                     @Override
-                    public void onClick(DialogInterface d, int which) {
+                    public void onClick() {
                         String host = HostUtil.normalizeInput(et.getText().toString());
                         if (!host.isEmpty()) {
                             cb.onText(host);
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
-                .create();
-        dlg.show();
+                .show();
 
         try {
             et.requestFocus();
@@ -71,36 +100,36 @@ public final class Dialogs {
      */
     public static void pickBrowser(final Activity act, String title, final boolean allowDefault,
                                    final OnPick cb) {
-        pickBrowser(act, title, allowDefault ? R.string.use_default_browser : 0, cb);
+        pickBrowser(act, title, allowDefault ? Lang.s(act, "use_default_browser") : null, cb);
     }
 
     /**
      * 同上，但可以自定义第一项（“不使用默认”项）的文案；{@code defaultLabelRes} 传 0 表示没有这一项。
      */
-    public static void pickBrowser(final Activity act, String title, final int defaultLabelRes,
+    public static void pickBrowser(final Activity act, String title, final String defaultLabel,
                                    final OnPick cb) {
-        final boolean allowDefault = defaultLabelRes != 0;
+        final boolean allowDefault = defaultLabel != null;
         final List<Target> list = BrowserCatalog.browsers(act);
         if (list.isEmpty()) {
-            new AlertDialog.Builder(act)
-                    .setTitle(R.string.browser_list_empty_title)
-                    .setMessage(R.string.browser_list_empty_msg_short)
-                    .setPositiveButton(R.string.ok, null)
+            MdDialog.create(act)
+                    .title(Lang.s(act, "browser_list_empty_title"))
+                    .message(Lang.s(act, "browser_list_empty_msg_short"))
+                    .positive(Lang.s(act, "ok"), null)
                     .show();
             return;
         }
         final List<String> labels = new ArrayList<String>();
         if (allowDefault) {
-            labels.add(act.getString(defaultLabelRes));
+            labels.add(defaultLabel);
         }
         for (Target t : list) {
             labels.add(t.preferred ? t.label + "（当前默认）" : t.label);
         }
-        new AlertDialog.Builder(act)
-                .setTitle(title)
-                .setItems(labels.toArray(new String[0]), new DialogInterface.OnClickListener() {
+        MdDialog.create(act)
+                .title(title)
+                .items(labels.toArray(new CharSequence[0]), new MdDialog.OnItem() {
                     @Override
-                    public void onClick(DialogInterface d, int which) {
+                    public void onItem(int which) {
                         int idx = allowDefault ? which - 1 : which;
                         if (idx < 0) {
                             cb.onPick(null, true);
@@ -109,7 +138,7 @@ public final class Dialogs {
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .negative(Lang.s(act, "cancel"), null)
                 .show();
     }
 }

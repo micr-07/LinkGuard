@@ -33,18 +33,18 @@ public class LogActivity extends ListActivityBase {
     }
 
     @Override
-    protected int searchHintRes() {
-        return R.string.search_hint_log;
+    protected String searchHint() {
+        return Lang.s(this, "search_hint_log");
     }
 
     @Override
-    protected int addButtonRes() {
-        return R.string.btn_clear_logs;
+    protected String addButtonLabel() {
+        return Lang.s(this, "btn_clear_logs");
     }
 
     @Override
-    protected int emptyRes() {
-        return R.string.empty_logs;
+    protected String emptyText() {
+        return Lang.s(this, "empty_logs");
     }
 
     @Override
@@ -70,18 +70,21 @@ public class LogActivity extends ListActivityBase {
 
     private String actionText(String action, String target) {
         if (LogStore.ACTION_BLOCKED.equals(action)) {
-            return getString(R.string.action_blocked);
+            return Lang.s(this, "action_blocked");
         }
         if (LogStore.ACTION_APP_BLOCKED.equals(action)) {
-            return getString(R.string.action_app_blocked) + " · " + target;
+            return Lang.s(this, "action_app_blocked") + " · " + target;
         }
         if (LogStore.ACTION_ALWAYS.equals(action)) {
-            return getString(R.string.action_always) + " · " + target;
+            return Lang.s(this, "action_always") + " · " + target;
         }
         if (LogStore.ACTION_ONCE.equals(action)) {
-            return getString(R.string.action_once) + " · " + target;
+            return Lang.s(this, "action_once") + " · " + target;
         }
-        return getString(R.string.action_opened) + " · " + target;
+        if (LogStore.ACTION_DENIED.equals(action)) {
+            return Lang.s(this, "action_denied");
+        }
+        return Lang.s(this, "action_opened") + " · " + target;
     }
 
     @Override

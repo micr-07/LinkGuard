@@ -13,6 +13,7 @@ public final class LogStore {
     public static final String ACTION_ONCE = "once";
     public static final String ACTION_ALWAYS = "always";
     public static final String ACTION_OPENED = "opened";
+    public static final String ACTION_DENIED = "denied";
 
     private static final String KEY = "logs";
     private static final int MAX = 100;

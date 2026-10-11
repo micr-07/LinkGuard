@@ -146,4 +146,41 @@
     <string name="toast_app_blocked">已屏蔽 %1$s 拉起的链接</string>
     <string name="action_app_blocked">已屏蔽来源应用</string>
     <string name="browser_list_empty_msg_short">系统当前限制了“读取应用列表”，扫描不到其它浏览器。\n\n请到「系统设置 → 应用 → LinkGuard → 权限」里允许“读取应用列表 / 获取应用列表”。</string>
+    <!-- ============ 主界面（M3 列表式设置页） ============ -->
+    <string name="group_rules">拦截规则</string>
+    <string name="group_behavior">行为</string>
+    <string name="group_look">外观</string>
+
+    <string name="status_ok_title">已生效</string>
+    <string name="status_ok_desc">其它应用拉起 http / https 链接时都会先经过本应用。</string>
+    <string name="status_no_title">还没生效</string>
+    <string name="status_no_desc">设为系统默认浏览器后，才能拦下别的应用拉起的链接。</string>
+    <string name="status_btn_set">设为默认浏览器</string>
+    <string name="status_btn_settings">打不开？到系统设置里手动选</string>
+
+    <string name="row_default_browser">默认打开方式</string>
+    <string name="row_theme">配色</string>
+    <string name="row_about">关于 LinkGuard</string>
+    <string name="row_show_dialog">被拉起时先弹窗询问</string>
+    <string name="row_show_dialog_sub">关掉后，不在名单里的网址直接用默认浏览器打开</string>
+    <string name="row_toast">拦截时用小字提示我</string>
+    <string name="row_toast_sub">拉黑的网址不会弹任何界面</string>
+
+    <string name="val_none">未设置</string>
+    <string name="val_count">%1$d 项</string>
+    <string name="val_count_logs">%1$d 条</string>
+    <string name="val_scan_ok">已找到 %1$d 个浏览器</string>
+    <string name="val_scan_none">没找到浏览器，请允许「读取应用列表」权限</string>
+    <!-- ============ 拦截弹窗：拒绝 / 屏蔽降级为一行小字 ============ -->
+    <string name="opt_deny">拒绝</string>
+    <string name="toast_denied">已拒绝，没有打开</string>
+    <string name="action_denied">已拒绝</string>
+    <string name="app_block_line">屏蔽「%1$s」的所有链接</string>
+    <string name="app_block_confirm_title">屏蔽「%1$s」？</string>
+    <string name="app_block_confirm_msg">以后这个应用拉起的链接都会被直接拦下，不再询问。\n\n这是最强的一级拦截，需要时可以到「已屏蔽的应用」里取消。</string>
+    <string name="app_block_confirm_ok">屏蔽</string>
+    <string name="app_block_done">已屏蔽「%1$s」</string>
+
+    <!-- ============ 配色预览 ============ -->
+    <string name="theme_in_use">使用中</string>
 </resources>

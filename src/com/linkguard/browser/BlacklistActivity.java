@@ -1,7 +1,7 @@
 package com.linkguard.browser;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +25,18 @@ public class BlacklistActivity extends ListActivityBase {
     }
 
     @Override
-    protected int searchHintRes() {
-        return R.string.search_hint_domain;
+    protected String searchHint() {
+        return Lang.s(this, "search_hint_domain");
     }
 
     @Override
-    protected int addButtonRes() {
-        return R.string.add_black_domain;
+    protected String addButtonLabel() {
+        return Lang.s(this, "add_black_domain");
     }
 
     @Override
-    protected int emptyRes() {
-        return R.string.empty_blacklist;
+    protected String emptyText() {
+        return Lang.s(this, "empty_blacklist");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class BlacklistActivity extends ListActivityBase {
         for (String domain : Lists.blacklist(this)) {
             RowAdapter.Row r = new RowAdapter.Row(domain);
             r.title = domain;
-            r.subtitle = getString(R.string.rule_block);
+            r.subtitle = Lang.s(this, "rule_block");
             rows.add(r);
         }
         return rows;
@@ -53,14 +53,14 @@ public class BlacklistActivity extends ListActivityBase {
 
     @Override
     protected void onRowClicked(final RowAdapter.Row row) {
-        new AlertDialog.Builder(this)
-                .setTitle(row.key)
-                .setItems(new String[]{
-                        getString(R.string.move_to_white),
-                        getString(R.string.btn_delete)},
-                        new DialogInterface.OnClickListener() {
+        MdDialog.create(this)
+                .title(row.key)
+                .items(new CharSequence[]{
+                        Lang.s(this, "move_to_white"),
+                        Lang.s(this, "btn_delete")},
+                        new MdDialog.OnItem() {
                             @Override
-                            public void onClick(DialogInterface d, int which) {
+                            public void onItem(int which) {
                                 if (which == 0) {
                                     Lists.removeBlack(BlacklistActivity.this, row.key);
                                     Lists.addWhite(BlacklistActivity.this, row.key);
@@ -70,7 +70,7 @@ public class BlacklistActivity extends ListActivityBase {
                                 reload();
                             }
                         })
-                .setNegativeButton(R.string.cancel, null)
+                .negative(Lang.s(this, "cancel"), null)
                 .show();
     }
 
@@ -82,7 +82,7 @@ public class BlacklistActivity extends ListActivityBase {
 
     @Override
     protected void onAddClicked() {
-        Dialogs.inputDomain(this, R.string.add_black_domain, R.string.add_rule_hint,
+        Dialogs.inputDomain(this, Lang.s(this, "add_black_domain"), Lang.s(this, "add_rule_hint"),
                 new Dialogs.OnText() {
                     @Override
                     public void onText(String text) {

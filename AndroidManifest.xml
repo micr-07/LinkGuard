@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.linkguard.browser">
 
-    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="36" />
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
 
-    <!-- 本应用自身不联网，声明它只是为了满足系统“默认浏览器”角色的资格校验。 -->
+    <!--
+      联网只用于拦截弹窗里的「网页实时预览」。除此之外没有任何网络行为，
+      名单、记录、配置全部存在本机 SharedPreferences，不上传任何数据。
+      声明它同时也是满足系统「默认浏览器」角色资格校验的必要条件。
+    -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--

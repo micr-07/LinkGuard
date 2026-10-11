@@ -131,11 +131,54 @@ public final class BrowserCatalog {
         return i;
     }
 
+    /**
+     * 进程级缓存。
+     * queryIntentActivities() 要遍历所有已安装应用，主线程上跑一次几十毫秒；
+     * 主界面刷新、弹窗、选择器都会调它，不缓存会重复付出这个代价。
+     * 用户手动「重新扫描」或安装/卸载应用后，调 {@link #invalidate()} 作废。
+     */
+    private static List<Target> CACHE;
+    /** 缓存下来的诊断数据，顺序与 Diag 的字段一一对应。 */
+    private static int[] CACHE_STATS;
+    private static boolean CACHE_QUERY_ALL;
+
+    public static void invalidate() {
+        CACHE = null;
+        CACHE_STATS = null;
+    }
+
     public static List<Target> browsers(Context ctx) {
-        return browsers(ctx, null);
+        return browsers(ctx, (Diag) null);
     }
 
     public static List<Target> browsers(Context ctx, Diag diag) {
+        if (CACHE != null) {
+            applyCachedDiag(diag);
+            return CACHE;
+        }
+        List<Target> list = enumerate(ctx, diag);
+        CACHE = list;
+        if (diag != null) {
+            CACHE_STATS = new int[]{diag.countQuery, diag.countQueryAll, diag.countTotal,
+                    diag.knownInstalled, diag.installedVisible};
+            CACHE_QUERY_ALL = diag.queryAllGranted;
+        }
+        return list;
+    }
+
+    private static void applyCachedDiag(Diag diag) {
+        if (diag == null || CACHE_STATS == null) {
+            return;
+        }
+        diag.countQuery = CACHE_STATS[0];
+        diag.countQueryAll = CACHE_STATS[1];
+        diag.countTotal = CACHE_STATS[2];
+        diag.knownInstalled = CACHE_STATS[3];
+        diag.installedVisible = CACHE_STATS[4];
+        diag.queryAllGranted = CACHE_QUERY_ALL;
+    }
+
+    private static List<Target> enumerate(Context ctx, Diag diag) {
         PackageManager pm = ctx.getPackageManager();
         String me = ctx.getPackageName();
         Map<String, Target> map = new LinkedHashMap<String, Target>();

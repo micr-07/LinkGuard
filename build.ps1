@@ -15,7 +15,7 @@ param(
     [string]$Python = "python",
     [string]$Platform = "android-36.1",
     [string]$BuildTools = "36.1.0",
-    [int]$MinSdk = 29,
+    [int]$MinSdk = 21,
     [int]$TargetSdk = 36
 )
 
@@ -30,15 +30,16 @@ foreach ($p in @($Bt, $Jar, (Join-Path $Jbr 'bin\javac.exe'))) {
 
 $env:JAVA_HOME = $Jbr
 $JavaC = Join-Path $Jbr 'bin\javac.exe'
+$JarTool = Join-Path (Split-Path $JavaC -Parent) 'jar.exe'
 $KeyTool = Join-Path $Jbr 'bin\keytool.exe'
 
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $Root
 
 $AppName   = '链接守卫'
-$Version   = '2.0'
-$VersionCode = 11
-$OutName   = 'LinkGuard-v2.0'
+$Version   = '2.1'
+$VersionCode = 12
+$OutName   = 'LinkGuard-v2.1'
 
 Write-Host "=== 构建 $AppName $Version ===" -ForegroundColor Cyan
 
@@ -66,6 +67,7 @@ Write-Host '[3/9] aapt2 link'
 & (Join-Path $Bt 'aapt2.exe') link `
     -o build\base.apk `
     -I $Jar `
+    -A assets `
     --manifest AndroidManifest.xml `
     --java gen `
     --min-sdk-version $MinSdk `
@@ -83,8 +85,11 @@ $srcs = @(Get-ChildItem -Recurse -Path src, gen -Filter *.java | ForEach-Object 
 if ($LASTEXITCODE -ne 0) { throw 'javac 失败' }
 
 Write-Host '[5/9] d8'
-$classes = @(Get-ChildItem -Recurse -Path classes -Filter *.class | ForEach-Object { $_.FullName })
-& (Join-Path $Bt 'd8.bat') --min-api $MinSdk --lib $Jar --output dexout @classes
+# class 文件多了以后直接列在命令行会超出 Windows 的 32K 限制（"The command line is too long"），
+# 先打成 jar 再交给 d8。
+& $JarTool cf build\classes.jar -C classes . | Out-Null
+if ($LASTEXITCODE -ne 0) { throw '打包 classes.jar 失败' }
+& (Join-Path $Bt 'd8.bat') --min-api $MinSdk --lib $Jar --output dexout build\classes.jar
 if ($LASTEXITCODE -ne 0) { throw 'd8 失败' }
 
 # ---------------------------------------------------------------- 打包

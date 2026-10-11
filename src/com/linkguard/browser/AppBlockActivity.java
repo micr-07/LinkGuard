@@ -39,23 +39,23 @@ public class AppBlockActivity extends ListActivityBase {
     }
 
     @Override
-    protected int searchHintRes() {
-        return R.string.search_hint_app;
+    protected String searchHint() {
+        return Lang.s(this, "search_hint_app");
     }
 
     @Override
-    protected int addButtonRes() {
-        return 0;
+    protected String addButtonLabel() {
+        return null;
     }
 
     @Override
-    protected int emptyRes() {
-        return R.string.empty_appblock;
+    protected String emptyText() {
+        return Lang.s(this, "empty_appblock");
     }
 
     @Override
-    protected int noteRes() {
-        return R.string.app_block_note;
+    protected String note() {
+        return Lang.s(this, "app_block_note");
     }
 
     @Override
