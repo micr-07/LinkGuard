@@ -16,7 +16,10 @@ param(
     [string]$Platform = "android-36.1",
     [string]$BuildTools = "36.1.0",
     [int]$MinSdk = 21,
-    [int]$TargetSdk = 36
+    [int]$TargetSdk = 36,
+    # 版本号可从命令行覆盖，免得每次发版都手改脚本
+    [string]$VersionOverride = '',
+    [int]$VersionCodeOverride = 0
 )
 
 $ErrorActionPreference = 'Stop'
@@ -37,10 +40,9 @@ $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $Root
 
 $AppName   = '链接守卫'
-$Version   = '2.1'
-$VersionCode = 12
-$OutName   = 'LinkGuard-v2.1'
-
+if ($VersionOverride) { $Version = $VersionOverride } else { $Version = '3.1' }
+if ($VersionCodeOverride) { $VersionCode = $VersionCodeOverride } else { $VersionCode = 31 }
+$OutName   = "LinkGuard-v$Version"
 Write-Host "=== 构建 $AppName $Version ===" -ForegroundColor Cyan
 
 # ---------------------------------------------------------------- 清理
