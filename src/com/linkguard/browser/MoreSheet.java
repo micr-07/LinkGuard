@@ -40,6 +40,12 @@ public final class MoreSheet {
         void onZoom();
 
         void onPreviewToggle(boolean on);
+
+        /** 复制完整链接。 */
+        void onCopyLink();
+
+        /** 隐私开关变化（由面板自己写 Prefs，这里只通知宿主刷新）。 */
+        void onPrivacyChanged();
     }
 
     private final Activity act;
@@ -174,6 +180,72 @@ public final class MoreSheet {
         mark.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 1));
         content.addView(mark);
+
+        // ---- 这个链接（不改变任何规则的一次性动作）----
+        zone(Lang.s(act, "zone_this"));
+        row(R.drawable.ic_copy, Lang.s(act, "copy_link"), new Rows.OnClick() {
+            @Override
+            public void onClick() {
+                dismiss();
+                if (cb != null) {
+                    cb.onCopyLink();
+                }
+            }
+        });
+
+        // ---- 隐私 ----
+        zone(Lang.s(act, "zone_privacy"));
+        Rows.addSwitch(content, Lang.s(act, "hide_url"), Lang.s(act, "hide_url_sub"),
+                Prefs.hideUrl(act), 0, new android.widget.CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(android.widget.CompoundButton b, boolean on) {
+                        Prefs.setHideUrl(act, on);
+                        if (cb != null) {
+                            cb.onPrivacyChanged();
+                        }
+                    }
+                });
+        Rows.addSwitch(content, Lang.s(act, "strip_params"), Lang.s(act, "strip_params_sub"),
+                Prefs.stripParams(act), 0, new android.widget.CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(android.widget.CompoundButton b, boolean on) {
+                        Prefs.setStripParams(act, on);
+                        if (cb != null) {
+                            cb.onPrivacyChanged();
+                        }
+                    }
+                });
+        Rows.addSwitch(content, Lang.s(act, "no_preview_remote"),
+                Lang.s(act, "no_preview_remote_sub"),
+                Prefs.noRemoteRes(act), 0, new android.widget.CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(android.widget.CompoundButton b, boolean on) {
+                        Prefs.setNoRemoteRes(act, on);
+                        if (cb != null) {
+                            cb.onPrivacyChanged();
+                        }
+                    }
+                });
+        Rows.addSwitch(content, Lang.s(act, "clear_on_exit"), Lang.s(act, "clear_on_exit_sub"),
+                Prefs.clearOnExit(act), 0, new android.widget.CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(android.widget.CompoundButton b, boolean on) {
+                        Prefs.setClearOnExit(act, on);
+                        if (cb != null) {
+                            cb.onPrivacyChanged();
+                        }
+                    }
+                });
+        Rows.addSwitch(content, Lang.s(act, "incognito"), Lang.s(act, "incognito_sub"),
+                Prefs.incognito(act), 0, new android.widget.CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(android.widget.CompoundButton b, boolean on) {
+                        Prefs.setIncognito(act, on);
+                        if (cb != null) {
+                            cb.onPrivacyChanged();
+                        }
+                    }
+                });
 
         // ---- 预览 ----
         zone(Lang.s(act, "zone_preview"));

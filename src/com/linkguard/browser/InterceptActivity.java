@@ -251,7 +251,7 @@ public class InterceptActivity extends Activity {
 
         tvTitle.setText(Lang.s(this, "dialog_title"));
         tvRoot.setText(plan.root);
-        tvUrl.setText(plan.url);
+        tvUrl.setText(Prefs.hideUrl(this) ? plan.root : plan.url);
         tvSub.setText(Lang.f(this, "dialog_from", plan.srcLabel == null ? "?" : plan.srcLabel));
 
         findViewById(R.id.btnMore).setOnClickListener(new View.OnClickListener() {
@@ -408,7 +408,7 @@ public class InterceptActivity extends Activity {
     private void allowOnce() {
         Target def = defaultTarget();
         if (def != null && def.valid()) {
-            if (LaunchHelper.launch(this, plan.uri, def)) {
+            if (LaunchHelper.launch(this, sanitize(plan.uri), def)) {
                 LogStore.add(this, plan.root, plan.url, LogStore.ACTION_ONCE, def.label);
                 finishDelayed(300);
             } else {
@@ -420,10 +420,19 @@ public class InterceptActivity extends Activity {
                 new Dialogs.OnPick() {
                     @Override
                     public void onPick(Target t, boolean useDefault) {
-                        if (t != null && LaunchHelper.launch(InterceptActivity.this, plan.uri, t)) {
+                        if (t == null) {
+                            return;
+                        }
+                        // 还没设过默认浏览器时，这次选中的就是以后一直用的那个。
+                        // 新安装状态下第一次挑浏览器，直接设为默认，省掉再去设置页的一步。
+                        if (!Prefs.hasDefault(InterceptActivity.this)) {
+                            Prefs.setDefault(InterceptActivity.this, t.pkg, t.act, t.label);
+                            toast(Lang.f(InterceptActivity.this, "toast_default_saved", t.label));
+                        }
+                        if (LaunchHelper.launch(InterceptActivity.this, sanitize(plan.uri), t)) {
                             LogStore.add(InterceptActivity.this, plan.root, plan.url,
                                     LogStore.ACTION_ONCE, t.label);
-                            finishDelayed(300);
+                            finishDelayed(400);
                         } else {
                             toast(Lang.s(InterceptActivity.this, "toast_launch_failed"));
                         }
@@ -487,8 +496,88 @@ public class InterceptActivity extends Activity {
                             setupPreview();
                         }
                     }
+
+                    @Override
+                    public void onPrivacyChanged() {
+                        applyPrivacy();
+                    }
+
+                    @Override
+                    public void onCopyLink() {
+                        try {
+                            android.content.ClipboardManager cm =
+                                    (android.content.ClipboardManager)
+                                            getSystemService(CLIPBOARD_SERVICE);
+                            if (cm != null) {
+                                cm.setPrimaryClip(android.content.ClipData
+                                        .newPlainText("url", plan.url));
+                                toast(Lang.s(InterceptActivity.this, "toast_copied"));
+                            }
+                        } catch (Exception ignored) {
+                        }
+                        finishDelayed(300);
+                    }
                 })
                 .show();
+    }
+
+    /** 隐私开关变化后，立刻把界面按新设置重画一遍。 */
+    private void applyPrivacy() {
+        if (tvUrl != null) {
+            tvUrl.setText(Prefs.hideUrl(this) ? plan.root : plan.url);
+        }
+        if (wvPreview != null) {
+            try {
+                WebSettings st = wvPreview.getSettings();
+                boolean block = Prefs.noRemoteRes(this);
+                st.setBlockNetworkImage(block);
+                st.setJavaScriptEnabled(!block);
+            } catch (Exception ignored) {
+            }
+            if (wvPreview.getUrl() != null) {
+                wvPreview.reload();
+            }
+        }
+    }
+
+    /** 打开前按隐私设置处理 URL（剥离追踪参数）。 */
+    private Uri sanitize(Uri in) {
+        if (!Prefs.stripParams(this) || in == null) {
+            return in;
+        }
+        try {
+            String q = in.getQuery();
+            if (q == null || q.isEmpty()) {
+                return in;
+            }
+            StringBuilder keep = new StringBuilder();
+            for (String kv : q.split("&")) {
+                String k = kv.split("=", 2)[0].toLowerCase(Locale.ROOT);
+                if (k.startsWith("utm_") || k.equals("spm") || k.equals("from")
+                        || k.equals("share_token") || k.equals("ref")) {
+                    continue;
+                }
+                if (keep.length() > 0) {
+                    keep.append('&');
+                }
+                keep.append(kv);
+            }
+            String nq = keep.toString();
+            Uri.Builder b = in.buildUpon().clearQuery();
+            if (!nq.isEmpty()) {
+                for (String kv : nq.split("&")) {
+                    int i = kv.indexOf('=');
+                    if (i > 0) {
+                        b.appendQueryParameter(kv.substring(0, i), kv.substring(i + 1));
+                    } else {
+                        b.appendQueryParameter(kv, "");
+                    }
+                }
+            }
+            return b.build();
+        } catch (Exception e) {
+            return in;
+        }
     }
 
     /** 缩放：直接输数字，枚举太别扭。 */

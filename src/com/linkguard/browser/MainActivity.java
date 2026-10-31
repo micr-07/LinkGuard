@@ -216,7 +216,7 @@ public class MainActivity extends Activity {
 
         LinearLayout dlg = findViewById(R.id.listDialog);
         swWebPreview = Rows.addSwitch(dlg, Lang.s(this, "web_preview"), null,
-                Prefs.webPreview(this), R.drawable.ic_page,
+                Prefs.webPreview(this), 0,
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton b, boolean on) {
@@ -225,7 +225,7 @@ public class MainActivity extends Activity {
                 });
         Rows.divider(dlg);
         rowZoom = Rows.add(dlg, Lang.s(this, "preview_zoom"), null, Prefs.zoomLabel(this),
-                R.drawable.ic_zoom, new Rows.OnClick() {
+                new Rows.OnClick() {
                     @Override
                     public void onClick() {
                         showPickZoomDialog();
@@ -233,7 +233,7 @@ public class MainActivity extends Activity {
                 });
         Rows.divider(dlg);
         Rows.add(dlg, Lang.s(this, "row_test_dialog"), Lang.s(this, "row_test_dialog_sub"),
-                null, R.drawable.ic_browser, new Rows.OnClick() {
+                null, new Rows.OnClick() {
                     @Override
                     public void onClick() {
                         testDialog();
@@ -552,11 +552,78 @@ public class MainActivity extends Activity {
         }
     }
     private void showAboutDialog() {
+        // 正文用自定义内容：除了简介，底部还要放两个可点的链接
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+
+        TextView body = new TextView(this);
+        body.setText(Lang.f(this, "about_text", versionName()));
+        body.setTextSize(14);
+        body.setLineSpacing(dp(3), 1f);
+        body.setTextColor(Themes.onSurfaceVariant(this));
+        box.addView(body);
+
+        TextView label = new TextView(this);
+        LinearLayout.LayoutParams lpLabel = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpLabel.topMargin = dp(20);
+        label.setLayoutParams(lpLabel);
+        label.setText(Lang.s(this, "about_links"));
+        label.setTextSize(12);
+        label.setTextColor(Themes.primary(this));
+        label.setTypeface(label.getTypeface(), android.graphics.Typeface.BOLD);
+        box.addView(label);
+
+        box.addView(linkRow(R.drawable.ic_github, Lang.s(this, "link_github"),
+                "https://github.com/micr-07/LinkGuard"));
+        box.addView(linkRow(R.drawable.ic_link, Lang.s(this, "link_website"),
+                "https://micger.top/"));
+
         MdDialog.create(this)
                 .title(Lang.s(this, "row_about"))
-                .message(Lang.f(this, "about_text", versionName()))
+                .content(box)
                 .positive(Lang.s(this, "ok"), null)
                 .show();
+    }
+
+    /** 关于弹窗里的一行外链：点一下用系统浏览器打开。 */
+    private View linkRow(int iconRes, String text, final String url) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        row.setPadding(0, dp(10), 0, dp(10));
+        row.setBackgroundResource(android.R.drawable.list_selector_background);
+        row.setClickable(true);
+
+        android.widget.ImageView ic = new android.widget.ImageView(this);
+        LinearLayout.LayoutParams lpIc = new LinearLayout.LayoutParams(dp(20), dp(20));
+        lpIc.rightMargin = dp(12);
+        ic.setLayoutParams(lpIc);
+        ic.setImageResource(iconRes);
+        ic.setImageTintList(android.content.res.ColorStateList.valueOf(Themes.primary(this)));
+        row.addView(ic);
+
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextSize(14);
+        tv.setTextColor(Themes.primary(this));
+        row.addView(tv);
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                } catch (Exception e) {
+                    toast(Lang.s(MainActivity.this, "toast_no_browser_short"));
+                }
+            }
+        });
+        return row;
+    }
+
+    private int dp(int v) {
+        return (int) (v * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private void toast(String msg) {

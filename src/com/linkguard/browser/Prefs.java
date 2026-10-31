@@ -18,6 +18,11 @@ public final class Prefs {
     private static final String K_LANG = "lang";
     private static final String K_WEB_PREVIEW = "web_preview";
     private static final String K_ZOOM = "preview_zoom";
+    private static final String K_HIDE_URL = "hide_url";
+    private static final String K_STRIP = "strip_params";
+    private static final String K_NO_REMOTE = "no_remote_res";
+    private static final String K_CLEAR_EXIT = "clear_on_exit";
+    private static final String K_INCOGNITO = "incognito";
 
     private Prefs() {
     }
@@ -129,5 +134,49 @@ public final class Prefs {
 
     public static void setToastOnBlock(Context c, boolean v) {
         get(c).edit().putBoolean(K_TOAST, v).apply();
+    }
+    /** 弹窗里只显示根域名，不显示完整路径。 */
+    public static boolean hideUrl(Context c) {
+        return get(c).getBoolean(K_HIDE_URL, false);
+    }
+
+    public static void setHideUrl(Context c, boolean v) {
+        get(c).edit().putBoolean(K_HIDE_URL, v).apply();
+    }
+
+    /** 打开前剥离 utm_ 等追踪参数。 */
+    public static boolean stripParams(Context c) {
+        return get(c).getBoolean(K_STRIP, false);
+    }
+
+    public static void setStripParams(Context c, boolean v) {
+        get(c).edit().putBoolean(K_STRIP, v).apply();
+    }
+
+    /** 预览不加载第三方资源（图片/脚本）。 */
+    public static boolean noRemoteRes(Context c) {
+        return get(c).getBoolean(K_NO_REMOTE, false);
+    }
+
+    public static void setNoRemoteRes(Context c, boolean v) {
+        get(c).edit().putBoolean(K_NO_REMOTE, v).apply();
+    }
+
+    /** 关掉弹窗就清空本次会话日志。 */
+    public static boolean clearOnExit(Context c) {
+        return get(c).getBoolean(K_CLEAR_EXIT, false);
+    }
+
+    public static void setClearOnExit(Context c, boolean v) {
+        get(c).edit().putBoolean(K_CLEAR_EXIT, v).apply();
+    }
+
+    /** 无痕：完全不记录历史。 */
+    public static boolean incognito(Context c) {
+        return get(c).getBoolean(K_INCOGNITO, false);
+    }
+
+    public static void setIncognito(Context c, boolean v) {
+        get(c).edit().putBoolean(K_INCOGNITO, v).apply();
     }
 }

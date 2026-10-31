@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 详情卡：比 dialog 底(白)深一档的容器色，跟随各套配色 -->
+<!-- 第二层：28 - 8(缝) = 20dp，与外圈同心 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="?attr/lgSurfaceContainerHigh" />
-    <corners android:radius="16dp" />
+    <corners android:radius="20dp" />
 </shape>

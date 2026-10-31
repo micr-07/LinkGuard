@@ -5,10 +5,18 @@
 /dexout/
 
 # ── 签名密钥：绝对不要提交 ──────────────────────────────────────
-# 仓库里不放 .jks，自己构建时用 keytool 生成一个即可（见 README「自己重新构建」）。
 /keystore/
+*.jks
+*.keystore
 
-# ── 图标设计的实验产物 ──────────────────────────────────────────
+# ── 仓库只放应用本身，不放打包好的 APK ──────────────────────────
+# APK 走 GitHub Releases（仓库右侧 Releases → 上传附件）。
+*.apk
+
+# ── 开发期脚本：不属于应用，留在本地即可 ────────────────────────
+/tools/optimize.py
+/tools/make_title.py
+/tools/shot.ps1
 /tools/_flat/
 __pycache__/
 *.pyc
